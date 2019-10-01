@@ -13,7 +13,7 @@ be correct, it must strictly adhere to the format given above.
 whereby the characters in the folder are case insentive and can be placed in any
 order. Additionally, if an error occurs during reading the settings, the
 programme will stop*/
-char* readGameSettings(char *fileName)
+int* readGameSettings(char *fileName)
 {
     FILE *inStrm; 
     inStrm = fopen(fileName, "r");
@@ -34,7 +34,8 @@ char* readGameSettings(char *fileName)
         /*multiplying MAX_SETTINGS by 2 as the name of the settings is going to
         be stored inside here as characters are represented by integers 
         therefore the format is <setting name>,<setting value> */
-        int *gameSettings = (int*)malloc((MAX_SETTINGS*2) * sizeof(int));
+        int *gameSettings = (int*)malloc(sizeof(int) * (MAX_SETTINGS*2));
+        int *retVal = (int*)malloc(sizeof(int) * MAX_SETTINGS);
 
         /*choosing to use a while loop instead of a for loop because a while
         loop gives the function the ability to exit out the loop immedietely  
@@ -101,11 +102,17 @@ char* readGameSettings(char *fileName)
     {
         perror("ERORR: file doesn't exist - ");
     }
+    
+    retVal[0] = *M;
+    retVal[1] = *N; 
+    retVal[2] = *K;
     fclose(inStrm);
-    return settingValues;
+
+    return retValue;
 }
 
 void freeFileInterFace()
 {
     free(gameSettings);
+    free(retValue);
 }
