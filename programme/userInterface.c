@@ -25,9 +25,9 @@ void userInterface()
 
     do
     {
-    printf("Enter option: ");
-    scanf(" %d\n", &userSel);
-    valid = validateInput(userSel);
+        printf("Enter option: ");
+        scanf(" %d\n", &userSel);
+        valid = validateInput(userSel);
 
         if(valid)
         {
