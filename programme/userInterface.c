@@ -24,9 +24,9 @@ void userInterface()
     "4: Save the logs to a file\n"
     "5: Exit the application\n");
 
+    printf("Enter option:\n");
     do
     {
-        printf("Enter option: ");
         scanf(" %d\n", &userSel);
         valid = validateInput(userSel);
 
@@ -61,7 +61,7 @@ void userInterface()
         }
         else
         {
-            printf("INVALID: please enter a valid option\n");
+            printf("INVALID: please enter a valid option: ");
         }
     }while(!stop);
 }
