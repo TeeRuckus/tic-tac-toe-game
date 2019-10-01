@@ -1,3 +1,4 @@
+/*PURPOSE OF FILE: */
 #include <stdio.h>
 #include "userInterface.h"
 

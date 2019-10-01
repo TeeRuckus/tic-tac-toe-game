@@ -17,7 +17,7 @@ char* readGameSettings(char *fileName)
     inStrm = fopen(fileName, "r");
     if(inStrm != NULL)
     {
-
+        
     }
     else
     {
