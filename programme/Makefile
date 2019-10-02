@@ -7,9 +7,11 @@
 # Makefile Variables
 
 CC = gcc
-EXEC1 = TicTacToe
+EXEC = TicTacToe
+TEST = TestSuite
 CFLAGS = -g -Wall -ansi -pedantic -Werror
-OBJ1 = userInterface.o
+OBJ = userInterface.o
+TEST_OBJ = fileInterface.o myString.o
 
 #if the user wants to enable all the debuggin features of the programme 
 ifdef DEBUG 
@@ -17,11 +19,20 @@ CFLAGS += -D DEBUG
 DEBUG : clean $(EXEC)
 endif
 
-$(EXEC1) : $(OBJ1)
-	$(CC) $(OBJ1) -o $(EXEC1) 
+$(EXEC) : $(OBJ)
+	$(CC) $(OBJ) -o $(EXEC) 
+
+$(TEST) : $(TEST_OBJ)
+	$(CC) $(TEST_OBJ) -o $(TEST)
 
 userInterface.o : userInterface.c userInterface.h
 	$(CC) $(CFLAGS) -c userInterface.c
 
+fileInterface.o : fileInterface.c fileInterface.h myString.h
+	$(CC) $(CFLAGS) -c fileInterface.c
+
+myString.o : myString.c myString.h
+	$(CC) $(CFLAGS) -c myString.c
+
 clean:
-	rm -f $(EXEC1) $(OBJ1) 
+	rm -f $(EXEC) $(TEST) $(OBJ) $(TEST_OBJ)

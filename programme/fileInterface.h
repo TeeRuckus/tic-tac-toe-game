@@ -4,5 +4,7 @@
     #define MAX_LINES 3
     #define FALSE 0
     #define TRUE !FALSE
+    int* readGameSettings(char *fileName);
+    void freeFileInterFace(int *gameValues);
 
 #endif
