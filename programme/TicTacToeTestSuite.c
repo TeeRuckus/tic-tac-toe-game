@@ -1,7 +1,10 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "TicTacToeTestSuite.h"
+#include "fileInterface.h"
 
-int main (void)
+int main(void)
 {
     int numTests, numPassed;
 
@@ -9,6 +12,7 @@ int main (void)
     numPassed = 0;
 
     /*testing the file interface */
+	numTests++;
     printf("TEST 1: ");
     fileInterfaceTest(numPassed);
 
@@ -17,12 +21,13 @@ int main (void)
 
 void fileInterfaceTest(int numPassed)
 {
-    int *retVal;
-    char *fileName = (char*)malloc(sizeof(char)*25);
-    strncpy(fileName, "gameSettingsTestValid.txt");
+    int ***retVal;
+    char *fileName = (char*)malloc(sizeof(char)*26);
+    strncpy(fileName, "gameSettingsTestValid.txt",26 );
     retVal = readGameSettings(fileName);
 
-    if(retVal[0] == 5 && retVal[1] == 4 && retVal[2] == 3)
+    if(*(*(*(retVal + 0))) == 5 && *(*(*(retVal + 1))) == 4 && 
+	*(*(*(retVal + 2))) == 3)
     {
         printf("PASSED: reading a valid file in the order of m,n,k\n");
         numPassed++;

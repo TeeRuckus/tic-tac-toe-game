@@ -14,10 +14,10 @@ whereby the characters in the folder are case insentive and can be placed in any
 order. Additionally, if an error occurs during reading the settings, the
 programme will stop*/
 
-int* readGameSettings(char *fileName)
+int*** readGameSettings(char *fileName)
 {
     int ***retValue;
-    int ***M, ***N, ***K;
+    int **M, **N, **K;
     char settingUpper;
     int  **gameSettings;
     FILE *inStrm; 
@@ -39,9 +39,9 @@ int* readGameSettings(char *fileName)
         therefore the format is <setting name>,<setting value> */
         gameSettings = (int**)malloc((sizeof(int*)) * (MAX_SETTINGS*2));
         retValue = (int***)malloc((sizeof(int**)) * MAX_SETTINGS);
-        M = (int***)malloc(sizeof(int**));
-        N = (int***)malloc(sizeof(int**));
-        K = (int***)malloc(sizeof(int**));
+        M = (int**)malloc(sizeof(int*));
+        N = (int**)malloc(sizeof(int*));
+        K = (int**)malloc(sizeof(int*));
 
         /*choosing to use a while loop instead of a for loop because a while
         loop gives the function the ability to exit out the loop immedietely  
@@ -59,15 +59,15 @@ int* readGameSettings(char *fileName)
                     case 'M':
                         /*we want the game setting, to actually point to the 
                         value of its setting */
-                        M = gameSettings[settingIndex + 1];
+                        M = (gameSettings + settingIndex + 1);
                         break;
 
                     case 'N':
-                        N = gameSettings[settingIndex +1];
+                        N = (gameSettings + settingIndex + 1);
                         break;
 
                     case 'K':
-                        K = gameSettings[settingIndex +1];
+                        K = (gameSettings + settingIndex + 1);
                         break;
 
                     default:
@@ -132,7 +132,7 @@ int* readGameSettings(char *fileName)
 The rational behind this is that the vales read in by the fileInterface 
 need to be used thorughout the whole programme, and we need the value read even
 after the readGameSettings function returns*/
-void freeFileInterFace(int *gameValues)
+void freeFileInterFace(int ***gameValues)
 {
     free(gameValues);
     gameValues = NULL;
