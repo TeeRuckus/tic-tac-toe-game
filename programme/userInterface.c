@@ -27,7 +27,7 @@ void userInterface()
     printf("Enter option:\n");
     do
     {
-        scanf(" %d\n", &userSel);
+        scanf(" %d", &userSel);
         valid = validateInput(userSel);
 
         if(valid)
@@ -62,6 +62,13 @@ void userInterface()
         else
         {
             printf("INVALID: please enter a valid option: ");
+            /*clearing the buffer to ensure what the user inputs in after incorrect
+            input is what the scanf statment will get. Additionally, it's 
+            to stop the programme from unexpictedily going into an ifinite loop*/
+            /*adapted from: 
+            https://www.geeksforgeeks.org/clearing-the-input-buffer-in-cc/ */
+            while((getchar()) != '\n');
+
         }
     }while(!stop);
 }
