@@ -26,12 +26,15 @@ void fileInterfaceTest(int numPassed)
     strncpy(fileName, "gameSettingsTestValid.txt",26 );
     retVal = readGameSettings(fileName);
 
-    if(*(*(*(retVal + 0))) == 5 && *(*(*(retVal + 1))) == 4 && 
-	*(*(*(retVal + 2))) == 3)
+    /*if(retVal[0] == 5 && retVal[1] == 4 && retVal[2] == 3)*/
+	if(*(*(*(retVal + 0))) == 5  && *(*(*(retVal + 1))) == 4 
+	&& *(*(*(retVal + 2))))
     {
         printf("PASSED: reading a valid file in the order of m,n,k\n");
         numPassed++;
     }
 
     freeFileInterFace(retVal);
+	free(fileName);
+	fileName = NULL;
 }

@@ -8,10 +8,12 @@
 
 CC = gcc
 EXEC = TicTacToe
+gameTest = gameGraphics
 TEST = TestSuite
 CFLAGS = -g -Wall -ansi -pedantic -Werror
 OBJ = userInterface.o
-TEST_OBJ = fileInterface.o myString.o
+TEST_OBJ = fileInterface.o myString.o TicTacToeTestSuite.o
+game_OBJ = gameGraphics.o
 
 #if the user wants to enable all the debuggin features of the programme 
 ifdef DEBUG 
@@ -25,6 +27,9 @@ $(EXEC) : $(OBJ)
 $(TEST) : $(TEST_OBJ)
 	$(CC) $(TEST_OBJ) -o $(TEST)
 
+$(gameTest) : $(game_OBJ)
+	$(CC) $(game_OBJ) -o $(gameTest)
+
 userInterface.o : userInterface.c userInterface.h
 	$(CC) $(CFLAGS) -c userInterface.c
 
@@ -34,5 +39,10 @@ fileInterface.o : fileInterface.c fileInterface.h myString.h
 myString.o : myString.c myString.h
 	$(CC) $(CFLAGS) -c myString.c
 
+gameGraphics.o : gameGraphics.c gameGraphics.h
+	$(CC) $(CFLAGS) -c gameGraphics.c
+
+TicTacToeTestSuite.o : TicTacToeTestSuite.c TicTacToeTestSuite.h fileInterface.h
+
 clean:
-	rm -f $(EXEC) $(TEST) $(OBJ) $(TEST_OBJ)
+	rm -f $(EXEC) $(TEST) $(OBJ) $(TEST_OBJ) $(gameTest) $(game_OBJ)

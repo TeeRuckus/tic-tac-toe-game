@@ -16,10 +16,8 @@ programme will stop*/
 
 int*** readGameSettings(char *fileName)
 {
-    int ***retValue;
-    int **M, **N, **K;
+    int **M, **N, **K, ***retValue, **gameSettings;
     char settingUpper;
-    int  **gameSettings;
     FILE *inStrm; 
     inStrm = fopen(fileName, "r");
     if(inStrm != NULL)
@@ -70,8 +68,8 @@ int*** readGameSettings(char *fileName)
                         K = (gameSettings + settingIndex + 1);
                         break;
 
-                    default:
-                        printf("%d:ERROR: invalid  setting format", lineCount);
+                    default:F
+                        printf("line %d:ERROR: invalid  setting format", lineCount);
                         errorDecteded = TRUE;
                         break;
                 }
@@ -84,7 +82,7 @@ int*** readGameSettings(char *fileName)
                 the function should stop reading in the file */
                 if(ferror(inStrm))
                 {
-                    printf("%d", lineCount);
+                    printf("line %d", lineCount);
                     perror(":ERROR: in processing last read line ");
                     errorDecteded = TRUE;
                 }
@@ -100,7 +98,8 @@ int*** readGameSettings(char *fileName)
             }
             else
             {
-                printf("ERROR: in settings file\n");
+                printf("line %d:ERROR: in settings file\n", lineCount);
+                stop = TRUE;
             }
 
         }while((!errorDecteded) && (!stop));
