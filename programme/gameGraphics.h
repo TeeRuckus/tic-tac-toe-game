@@ -9,7 +9,7 @@
     typedef struct player 
     {
         char player;
-        int *pos;
+        int occupied;
     }player;
 	void redrawGameBoard(int *gameSettings);
 #endif 
