@@ -1,15 +1,18 @@
 #ifndef GAME_GRAPHICS
 #define GAME_GRAPHICS
 	#define SPACING 5
-	/*pre-processor macro to determine the size of an array. this is based on 
-	the follwig rational "size of whole array" / "size of the first element (
-	this will be the size of the data-types the arrays hold) = "number of 
-	elements in the array"*/
-	#define LEN_ARRAY(X,Y) ((sizeof(X))/(sizeof(Y)))
+    #define FALSE 0
+    #define TRUE !FALSE
+    /*DON'T FORGOT TO EXPLAIN WHAT THIS DOES*/
     typedef struct player 
     {
-        char player;
+        char *player;
         int occupied;
     }player;
-	void redrawGameBoard(int *gameSettings);
+    void redrawGameBoard(player **placements, int *gameSettings, int  *pos, int *turn);
+    void create2DArray(player **inArr, int rows, int cols);
+    void clearGameBoard(player **inArr, int rows, int cols);
+    void free2DArray(player **inArr, int rows);
+    void playerMove(player **inArr, int *playPos, int *turn);
+    void switchPlayers(int *turn, char *playerAvatar);
 #endif 

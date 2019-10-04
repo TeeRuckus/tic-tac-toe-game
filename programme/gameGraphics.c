@@ -1,31 +1,34 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "gameGraphics.h"
 
 int main(void)
 {
-    int testSettings[3] = {5,4,4};
-    /*int pos[2] = {0,0};*/
-    redrawGameBoard(testSettings);
+    int *turn = (int*)malloc(sizeof(int));
+    player **placements;
+    /*lets always start the game with player one;*/
+    int testSettings[2] = {5,4};
+    int pos[2] = {2,0};
+    *turn  = 1;
+    placements = (player**)malloc(testSettings[0] * sizeof(player*));
+
+    /*make a function called create board which will do this */
+    create2DArray(placements, testSettings[0], testSettings[1]);
+    clearGameBoard(placements, testSettings[0], testSettings[1]);
+    redrawGameBoard(placements, testSettings, pos, turn);
+    free2DArray(placements, testSettings[0]);
     
     return 0;
 }
 
-void redrawGameBoard(int *gameSettings, int  *pos)
+void redrawGameBoard(player **placements, int *gameSettings, int  *pos, int *turn)
 {
-    int width, height, ii, jj, kk, comboToWin, tileNumRow, tileNumCol, 
-    lineBorders;
+    int width, height, ii, jj, kk, tileNumRow, tileNumCol;
 
-    player **placements;
     tileNumRow = 0;
     tileNumCol = 0; 
-    lineBorders = 0; 
     width = gameSettings[0];
     height = gameSettings[1]; 
-    comboToWin = gameSettings[2]; 
-    printf("%d\n", comboToWin);
-    lineBorders = width - 1;
-    placements = (char**)malloc(width * sizeof(char*));
-    create2DArray(placements, width, height);
     playerMove(placements, pos, turn);
     
     /*printing out the number references for the rows */
@@ -53,14 +56,15 @@ void redrawGameBoard(int *gameSettings, int  *pos)
         printf(" ||");
         for(kk = 0; kk < ((width * SPACING) - 4); kk++)
         {
-            if(kk < lineBorders)
+            if(kk < width-1)
             {
                 /*PUT PLAYER MOMENTS HERE*/
-                printf("    |"); 
-            
-            else if (kk == lineBorders)
+                printf("  %s |", placements[kk][jj].player);
+                /*printf("    |"); */
+            }
+            else if (kk == (width - 1))
             {
-                printf("   ||");
+                printf(" %s ||", placements[kk][jj].player);
             }
         }
         printf("\n");
@@ -81,33 +85,38 @@ void redrawGameBoard(int *gameSettings, int  *pos)
     }
 }
 
+/*PLACE THIS IN A DIFFEREN FILE. NOT REALLY RELATED TO GAME GRAPHICS*/
 /*PURPOSE: is to create a 2-dimensional array filled with blank spaces*/
 void create2DArray(player **inArr, int rows, int cols)
 {
-    int ii, jj;
+    int ii;
     /*mallocing the columns of the 2-D array*/
     for(ii = 0; ii < rows; ii++)
     {
-        inArr[ii] = (char*)malloc(cols * sizeof(char));
+        inArr[ii] = (player*)malloc(cols * sizeof(player));
     }
+}
 
-    /*setting the 2-D array to blank spaces */
+void clearGameBoard(player **inArr, int rows, int cols)
+{
+    int  ii, jj;
     for(ii = 0; ii < rows; ii++)
     {
         for(jj =  0; jj < cols; jj++)
         {
-            inArr[ii][jj].player = " ";
+            inArr[ii][jj].player = "X";
             inArr[ii][jj].occupied = FALSE;
         }
     }
+                                                            
 }
 
-void freeGameArrays(char **inArr)
+/*PUT THIS IN A DIFFEREN FILE AND NOT IN HERE*/
+/*figure put how to make this generic */
+void free2DArray(player **inArr, int rows)
 {   
-    int numRows, numCols, ii;
-    numRows = LEN_ARRAY(inArrr,inArr[0]);
-
-    for(ii = 0; ii < numRows; ii++)
+    int ii;
+    for(ii = 0; ii < rows; ii++)
     {
         free(inArr[ii]);
         inArr[ii] = NULL;
@@ -118,36 +127,38 @@ void freeGameArrays(char **inArr)
 
 void playerMove(player **inArr, int *playPos, int *turn)
 {   
-    int row, col;
-    row = playPos[0];
-    col = playPos[1];
+    char *playerAvatar;
+    int xCord, yCord;
+    xCord = playPos[0];
+    yCord = playPos[1];
+    playerAvatar = (char*)malloc((sizeof(char)) * 2);
+    switchPlayers(turn, playerAvatar);
 
-    if(inArr[row][col].occupied == FALSE) 
+    if(inArr[xCord][yCord].occupied == FALSE) 
     {
-        inArr[row][col] = switchPlayers(*turn);
+        inArr[xCord][yCord].player = playerAvatar;
     }
     else 
     {
         printf("INVALID: this position is already occupied\n");
     }
+
+    free(playerAvatar);
+    playerAvatar = NULL;
 }
 
-char* switchPlayers(int *turn)
+void switchPlayers(int *turn, char *playerAvatar)
 {
-    char *playerAvatar;
-    playerAvatar[2];
     if(*turn == 1) 
     {
         playerAvatar = "X";
         /*switching it back to player two's turn now */
         *turn = 2;
     }
-    else if(turn == 2)
+    else if(*turn == 2)
     {
         playerAvatar = "O";
         /*switching it back to player one's turn now */ 
         *turn = 1;
     }
-
-    return playerAvatar;
 }
