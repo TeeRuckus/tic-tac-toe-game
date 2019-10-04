@@ -24,12 +24,12 @@ int main(void)
 void redrawGameBoard(player **placements, int *gameSettings, int  *pos, int *turn)
 {
     int width, height, ii, jj, kk, tileNumRow, tileNumCol;
-
+    int *player;
     tileNumRow = 0;
     tileNumCol = 0; 
     width = gameSettings[0];
     height = gameSettings[1]; 
-    playerMove(placements, pos, turn);
+    player = playerMove(placements, pos, turn);
     
     /*printing out the number references for the rows */
     printf("  ");
@@ -125,7 +125,7 @@ void free2DArray(player **inArr, int rows)
     inArr = NULL;
 }
 
-void playerMove(player **inArr, int *playPos, int *turn)
+char *playerMove(player **inArr, int *playPos, int *turn)
 {   
     char *playerAvatar;
     int xCord, yCord;
@@ -142,9 +142,14 @@ void playerMove(player **inArr, int *playPos, int *turn)
     {
         printf("INVALID: this position is already occupied\n");
     }
+    return playerAvatar;
+}
 
-    free(playerAvatar);
-    playerAvatar = NULL;
+/*DON'T HAVE THIS HERE, PUT THIS IN A SEPERATE FUNCTION*/
+void freeCharPointer(char *inPlayer)
+{
+    free(inPlayer);
+    inPlayer = NULL;
 }
 
 void switchPlayers(int *turn, char *playerAvatar)
