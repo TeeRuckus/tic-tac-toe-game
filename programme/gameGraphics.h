@@ -13,6 +13,6 @@
     void create2DArray(player **inArr, int rows, int cols);
     void clearGameBoard(player **inArr, int rows, int cols);
     void free2DArray(player **inArr, int rows);
-    void playerMove(player **inArr, int *playPos, int *turn);
+	char *playerMove(player **inArr, int *playPos, int *turn);
     void switchPlayers(int *turn, char *playerAvatar);
 #endif 

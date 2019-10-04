@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "gameGraphics.h"
 
 int main(void)
@@ -7,8 +8,8 @@ int main(void)
     int *turn = (int*)malloc(sizeof(int));
     player **placements;
     /*lets always start the game with player one;*/
-    int testSettings[2] = {5,4};
-    int pos[2] = {2,0};
+    int testSettings[2] = {5,8};
+    int pos[2] = {2,1};
     *turn  = 1;
     placements = (player**)malloc(testSettings[0] * sizeof(player*));
 
@@ -24,7 +25,7 @@ int main(void)
 void redrawGameBoard(player **placements, int *gameSettings, int  *pos, int *turn)
 {
     int width, height, ii, jj, kk, tileNumRow, tileNumCol;
-    int *player;
+    char *player;
     tileNumRow = 0;
     tileNumCol = 0; 
     width = gameSettings[0];
@@ -104,7 +105,7 @@ void clearGameBoard(player **inArr, int rows, int cols)
     {
         for(jj =  0; jj < cols; jj++)
         {
-            inArr[ii][jj].player = "X";
+            inArr[ii][jj].player = " ";
             inArr[ii][jj].occupied = FALSE;
         }
     }
@@ -142,6 +143,7 @@ char *playerMove(player **inArr, int *playPos, int *turn)
     {
         printf("INVALID: this position is already occupied\n");
     }
+
     return playerAvatar;
 }
 
@@ -156,13 +158,15 @@ void switchPlayers(int *turn, char *playerAvatar)
 {
     if(*turn == 1) 
     {
-        playerAvatar = "X";
+        /*playerAvatar = "X";*/
+        strcpy(playerAvatar, "X");
         /*switching it back to player two's turn now */
         *turn = 2;
     }
     else if(*turn == 2)
     {
         playerAvatar = "O";
+        strcpy(playerAvatar, "O");
         /*switching it back to player one's turn now */ 
         *turn = 1;
     }
