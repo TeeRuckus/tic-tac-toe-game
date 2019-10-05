@@ -10,7 +10,7 @@ int main(void)
     /*lets always start the game with player one;*/
     int testSettings[2] = {5,8};
     int pos[2] = {2,1};
-    *turn  = 1;
+    *turn  = 2;
     placements = (player**)malloc(testSettings[0] * sizeof(player*));
 
     /*make a function called create board which will do this */
@@ -18,7 +18,8 @@ int main(void)
     clearGameBoard(placements, testSettings[0], testSettings[1]);
     redrawGameBoard(placements, testSettings, pos, turn);
     free2DArray(placements, testSettings[0]);
-    
+    free(turn);
+    turn = NULL;
     return 0;
 }
 
@@ -84,6 +85,9 @@ void redrawGameBoard(player **placements, int *gameSettings, int  *pos, int *tur
         }
         printf("\n");
     }
+
+    free(player);
+    player = NULL;
 }
 
 /*PLACE THIS IN A DIFFEREN FILE. NOT REALLY RELATED TO GAME GRAPHICS*/
@@ -158,14 +162,12 @@ void switchPlayers(int *turn, char *playerAvatar)
 {
     if(*turn == 1) 
     {
-        /*playerAvatar = "X";*/
         strcpy(playerAvatar, "X");
         /*switching it back to player two's turn now */
         *turn = 2;
     }
     else if(*turn == 2)
     {
-        playerAvatar = "O";
         strcpy(playerAvatar, "O");
         /*switching it back to player one's turn now */ 
         *turn = 1;
