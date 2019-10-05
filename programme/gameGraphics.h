@@ -3,6 +3,7 @@
 	#define SPACING 5
     #define FALSE 0
     #define TRUE !FALSE
+
     /*DON'T FORGOT TO EXPLAIN WHAT THIS DOES*/
     typedef struct player 
     {

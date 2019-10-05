@@ -44,13 +44,13 @@ myString.o : myString.c myString.h
 gameInterface.o : gameInterface.c gameGraphics.h memoryInterface.h gameLogic.h
 	$(CC) $(CFLAGS) -c gameInterface.c
 
-gameGraphics.o : gameGraphics.c gameGraphics.h
+gameGraphics.o : gameGraphics.c gameGraphics.h gameLogic.h
 	$(CC) $(CFLAGS) -c gameGraphics.c
 
-memoryInterface.o : memoryInterface.c memoryInterface.h
+memoryInterface.o : memoryInterface.c memoryInterface.h gameGraphics.h
 	$(CC) $(CFLAGS) -c memoryInterface.c
 
-gameLogic.o : gameLogic.c gameLogic.h
+gameLogic.o : gameLogic.c gameLogic.h gameGraphics.h
 	$(CC) $(CFLAGS) -c gameLogic.c
 
 TicTacToeTestSuite.o : TicTacToeTestSuite.c TicTacToeTestSuite.h fileInterface.h gameInterface.h

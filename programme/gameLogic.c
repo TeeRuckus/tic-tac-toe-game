@@ -1,5 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
+#include "gameGraphics.h"
 #include "gameLogic.h"
 
 char *playerMove(player **inArr, int *playPos, int *turn)

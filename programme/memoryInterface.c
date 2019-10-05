@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include "gameGraphics.h"
 #include "memoryInterface.h"
 
 void free2DArray(player **inArr, int rows)
@@ -14,9 +15,8 @@ void free2DArray(player **inArr, int rows)
 }
 
 
-void create2DArray(player **inArr, int rows, int cols)
+void create2DArray(player **inArr,int rows, int cols)
 {
-    inArr = (player**)malloc(rows * sizeof(player*));
     int ii;
     /*mallocing the columns of the 2-D array*/
     for(ii = 0; ii < rows; ii++)

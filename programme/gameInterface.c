@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "gameInterface.h"
 #include "gameGraphics.h"
 #include "memoryInterface.h"
 #include "gameLogic.h"
@@ -14,6 +15,7 @@ void playGame(int *gameSettings)
     /*we're always going to start the game with player one*/
     *turn = 1;
     exit = FALSE;
+    gameBoard = (player**)malloc(gameSettings[0] * sizeof(player*));
 
     create2DArray(gameBoard, gameSettings[0], gameSettings[1]);
     clearGameBoard(gameBoard, gameSettings[0], gameSettings[1]);
@@ -23,7 +25,7 @@ void playGame(int *gameSettings)
     do
     {
         getPosition(playerPos, turn);
-        if(validatePos(playerPos) == TRUE)
+        if(validatePos(playerPos, gameSettings[0], gameSettings[1]) == TRUE)
         {
             redrawGameBoard(gameBoard, gameSettings, playerPos, turn);
             exit = determineWinner(gameBoard);
@@ -52,7 +54,7 @@ void getPosition(int *playerPos, int *turn)
 
     do
     {
-        printf("Enter move: ");
+        printf("Player %d enter move: ", *turn);
         numReturned = scanf("%d %d",&xCord, &yCord);
         valid = TRUE;
         if(numReturned != 2)
