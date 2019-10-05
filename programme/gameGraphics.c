@@ -23,6 +23,21 @@ int main(void)
     return 0;
 }
 
+void drawGameBoard(player **placements, int *gameSettings)
+{
+    void *playerPos = malloc(sizeof(int));
+    int *turn = (int*)malloc(sizeof(int));
+    *turn = 1;
+    playerPos = NULL;
+
+    redrawGameBoard(placements, gameSettings, playerPos, turn);
+
+    free(playerPos);
+    free(turn);
+    playerPos =  NULL;
+    turn = NULL;
+}
+
 void redrawGameBoard(player **placements, int *gameSettings, int  *pos, int *turn)
 {
     int width, height, ii, jj, kk, tileNumRow, tileNumCol;
@@ -90,17 +105,6 @@ void redrawGameBoard(player **placements, int *gameSettings, int  *pos, int *tur
     player = NULL;
 }
 
-/*PLACE THIS IN A DIFFEREN FILE. NOT REALLY RELATED TO GAME GRAPHICS*/
-/*PURPOSE: is to create a 2-dimensional array filled with blank spaces*/
-void create2DArray(player **inArr, int rows, int cols)
-{
-    int ii;
-    /*mallocing the columns of the 2-D array*/
-    for(ii = 0; ii < rows; ii++)
-    {
-        inArr[ii] = (player*)malloc(cols * sizeof(player));
-    }
-}
 
 void clearGameBoard(player **inArr, int rows, int cols)
 {
@@ -114,62 +118,4 @@ void clearGameBoard(player **inArr, int rows, int cols)
         }
     }
                                                             
-}
-
-/*PUT THIS IN A DIFFEREN FILE AND NOT IN HERE*/
-/*figure put how to make this generic */
-void free2DArray(player **inArr, int rows)
-{   
-    int ii;
-    for(ii = 0; ii < rows; ii++)
-    {
-        free(inArr[ii]);
-        inArr[ii] = NULL;
-    }
-    free(inArr);
-    inArr = NULL;
-}
-
-char *playerMove(player **inArr, int *playPos, int *turn)
-{   
-    char *playerAvatar;
-    int xCord, yCord;
-    xCord = playPos[0];
-    yCord = playPos[1];
-    playerAvatar = (char*)malloc((sizeof(char)) * 2);
-    switchPlayers(turn, playerAvatar);
-
-    if(inArr[xCord][yCord].occupied == FALSE) 
-    {
-        inArr[xCord][yCord].player = playerAvatar;
-    }
-    else 
-    {
-        printf("INVALID: this position is already occupied\n");
-    }
-
-    return playerAvatar;
-}
-
-/*DON'T HAVE THIS HERE, PUT THIS IN A SEPERATE FUNCTION*/
-void freeCharPointer(char *inPlayer)
-{
-    free(inPlayer);
-    inPlayer = NULL;
-}
-
-void switchPlayers(int *turn, char *playerAvatar)
-{
-    if(*turn == 1) 
-    {
-        strcpy(playerAvatar, "X");
-        /*switching it back to player two's turn now */
-        *turn = 2;
-    }
-    else if(*turn == 2)
-    {
-        strcpy(playerAvatar, "O");
-        /*switching it back to player one's turn now */ 
-        *turn = 1;
-    }
 }

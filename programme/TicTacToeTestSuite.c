@@ -3,30 +3,30 @@
 #include <string.h>
 #include "TicTacToeTestSuite.h"
 #include "fileInterface.h"
+#include "gameInterface.h"
 
 int main(void)
 {
     int numTests, numPassed;
+    int gameSettings[2] = {5,7};
 
     numTests = 0;
     numPassed = 0;
 
-    /*testing the file interface */
 	numTests++;
-    printf("TEST 1: ");
-    fileInterfaceTest(numPassed);
+    printf("TEST 1:\n");
+    playGame(gameSettings);
 
     return 0;
 }
 
-void fileInterfaceTest(int numPassed)
+/*void fileInterfaceTest(int numPassed)
 {
     int ***retVal;
     char *fileName = (char*)malloc(sizeof(char)*26);
     strncpy(fileName, "gameSettingsTestValid.txt",26 );
     retVal = readGameSettings(fileName);
 
-    /*if(retVal[0] == 5 && retVal[1] == 4 && retVal[2] == 3)*/
 	if(*(*(*(retVal + 0))) == 5  && *(*(*(retVal + 1))) == 4 
 	&& *(*(*(retVal + 2))))
     {
@@ -37,4 +37,4 @@ void fileInterfaceTest(int numPassed)
     freeFileInterFace(retVal);
 	free(fileName);
 	fileName = NULL;
-}
+}*/

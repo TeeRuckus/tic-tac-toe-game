@@ -12,7 +12,8 @@ gameTest = gameGraphics
 TEST = TestSuite
 CFLAGS = -g -Wall -ansi -pedantic -Werror
 OBJ = userInterface.o
-TEST_OBJ = fileInterface.o myString.o TicTacToeTestSuite.o
+TEST_OBJ = TicTacToeTestSuite.o gameInterface.o gameLogic.o gameGraphics.o \
+memoryInterface.o 
 game_OBJ = gameGraphics.o
 
 #if the user wants to enable all the debuggin features of the programme 
@@ -39,10 +40,21 @@ fileInterface.o : fileInterface.c fileInterface.h myString.h
 myString.o : myString.c myString.h
 	$(CC) $(CFLAGS) -c myString.c
 
+
+gameInterface.o : gameInterface.c gameGraphics.h memoryInterface.h gameLogic.h
+	$(CC) $(CFLAGS) -c gameInterface.c
+
 gameGraphics.o : gameGraphics.c gameGraphics.h
 	$(CC) $(CFLAGS) -c gameGraphics.c
 
-TicTacToeTestSuite.o : TicTacToeTestSuite.c TicTacToeTestSuite.h fileInterface.h
+memoryInterface.o : memoryInterface.c memoryInterface.h
+	$(CC) $(CFLAGS) -c memoryInterface.c
+
+gameLogic.o : gameLogic.c gameLogic.h
+	$(CC) $(CFLAGS) -c gameLogic.c
+
+TicTacToeTestSuite.o : TicTacToeTestSuite.c TicTacToeTestSuite.h fileInterface.h gameInterface.h
+	$(CC) $(CFLAGS) -c TicTacToeTestSuite.c
 
 clean:
 	rm -f $(EXEC) $(TEST) $(OBJ) $(TEST_OBJ) $(gameTest) $(game_OBJ)
