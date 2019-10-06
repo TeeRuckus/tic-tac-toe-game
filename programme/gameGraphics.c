@@ -1,36 +1,27 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "gameGraphics.h"
 #include "gameLogic.h"
+#include "gameGraphics.h"
 
-void drawGameBoard(player **placements, int *gameSettings)
+void drawGameBoard(player **placements, int *gameSettings, int *turn)
 {
     void *playerPos = malloc(sizeof(int));
-    int *turn = (int*)malloc(sizeof(int));
-    *turn = 1;
     playerPos = NULL;
 
     redrawGameBoard(placements, gameSettings, playerPos, turn);
 
     free(playerPos);
-    free(turn);
-    playerPos =  NULL;
-    turn = NULL;
 }
 
 void redrawGameBoard(player **placements, int *gameSettings, int  *pos, int *turn)
 {
 	int width, height, ii, jj, kk, tileNumRow, tileNumCol;
-	char *player;
 	tileNumRow = 0;
 	tileNumCol = 0; 
 	width = gameSettings[0];
 	height = gameSettings[1]; 
-	if(pos != NULL)
-	{
-		player = playerMove(placements, pos, turn);
-	}
+	playerMove(placements, pos, turn);
 	
 	/*printing out the number references for the rows */
 	printf("  ");
@@ -60,12 +51,12 @@ void redrawGameBoard(player **placements, int *gameSettings, int  *pos, int *tur
 			if(kk < width-1)
 			{
 				/*PUT PLAYER MOMENTS HERE*/
-				printf("  %s |", placements[kk][jj].player);
+				printf("  %c |", placements[kk][jj].player);
 				/*printf("    |"); */
 			}
 			else if (kk == (width - 1))
 			{
-				printf(" %s ||", placements[kk][jj].player);
+				printf(" %c ||", placements[kk][jj].player);
 			}
 		}
 		printf("\n");
@@ -84,11 +75,8 @@ void redrawGameBoard(player **placements, int *gameSettings, int  *pos, int *tur
 		}
 		printf("\n");
 	}
-	if(pos !=NULL)
-	{
-		free(player);
-		player = NULL;
-	}
+	/*free(player);
+	player = NULL;*/
 
 }
 
@@ -100,7 +88,7 @@ void clearGameBoard(player **inArr, int rows, int cols)
     {
         for(jj =  0; jj < cols; jj++)
         {
-            inArr[ii][jj].player = " ";
+            inArr[ii][jj].player = ' ';
             inArr[ii][jj].occupied = FALSE;
         }
     }

@@ -26,4 +26,9 @@ TO DO:
 
 KNOWN BUGS: 
 
+    1) gameInterface.c: when you enter 2 or more numbers, the programme will 
+    just grab the first 2 numbers. The programme should, display an error 
+    saying that you have entered more than 2 numbers and re-prompt the player
+    to input their numbers.
+
 ADDITIONAL FUNCTIONALITY

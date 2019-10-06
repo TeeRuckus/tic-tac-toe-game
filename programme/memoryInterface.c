@@ -1,5 +1,5 @@
 #include <stdlib.h>
-#include "gameGraphics.h"
+#include "gameLogic.h"
 #include "memoryInterface.h"
 
 void free2DArray(player **inArr, int rows)
@@ -10,6 +10,7 @@ void free2DArray(player **inArr, int rows)
         free(inArr[ii]);
         inArr[ii] = NULL;
     }
+
     free(inArr);
     inArr = NULL;
 }

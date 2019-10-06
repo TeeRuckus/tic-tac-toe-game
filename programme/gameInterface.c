@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "gameLogic.h"
 #include "gameInterface.h"
 #include "gameGraphics.h"
 #include "memoryInterface.h"
-#include "gameLogic.h"
 
 void playGame(int *gameSettings)
 {
@@ -19,13 +19,13 @@ void playGame(int *gameSettings)
 
     create2DArray(gameBoard, gameSettings[0], gameSettings[1]);
     clearGameBoard(gameBoard, gameSettings[0], gameSettings[1]);
-    drawGameBoard(gameBoard, gameSettings);
+    drawGameBoard(gameBoard, gameSettings, turn);
 
     /*entering into the main game loop*/
     do
     {
         getPosition(playerPos, turn);
-        if(validatePos(playerPos, gameSettings[0], gameSettings[1]) == TRUE)
+        if(validatePos(playerPos, gameSettings[0], gameSettings[1]))
         {
             redrawGameBoard(gameBoard, gameSettings, playerPos, turn);
             exit = determineWinner(gameBoard);
@@ -33,7 +33,9 @@ void playGame(int *gameSettings)
         else
         {
             printf("ERROR: coordinates out of range please re-enter "
-            "coordinates");
+            "coordinates\n");
+            /*clearing the buffer*/ 
+            while((getchar()) != '\n');
         }
     }while(!exit);
 

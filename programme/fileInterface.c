@@ -14,7 +14,7 @@ whereby the characters in the folder are case insentive and can be placed in any
 order. Additionally, if an error occurs during reading the settings, the
 programme will stop*/
 
-int*** readGameSettings(char *fileName)
+int* readGameSettings(char *fileName)
 {
     int **M, **N, **K, ***retValue, **gameSettings;
     char settingUpper;

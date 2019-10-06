@@ -1,48 +1,58 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include "gameGraphics.h"
 #include "gameLogic.h"
+#include "gameGraphics.h"
 
-char *playerMove(player **inArr, int *playPos, int *turn)
+void playerMove(player **inArr, int *playPos, int *turn)
 {   
-    char *playerAvatar;
-    int xCord, yCord;
-    xCord = playPos[0];
-    yCord = playPos[1];
-    playerAvatar = (char*)malloc((sizeof(char)) * 2);
-    switchPlayers(turn, playerAvatar);
+	if(playPos != NULL)
+	{
+		char playerAvatar;
+		int xCord, yCord;
+		xCord = playPos[0];
+		yCord = playPos[1];
+		/*playerAvatar = (char*)malloc((sizeof(char)) * 2);*/
+		playerAvatar = switchPlayers(turn);
 
-    if(playPos == NULL)
-    {
-        /*Do nothing */
-    }
-    else if(inArr[xCord][yCord].occupied == FALSE) 
-    {
-        inArr[xCord][yCord].player = playerAvatar;
-    }
-    else 
-    {
-        printf("INVALID: this position is already occupied\n");
-    }
+		if(playPos == NULL)
+		{
+			/*Do nothing */
+		}
+		else if(inArr[xCord][yCord].occupied == FALSE) 
+		{
+			inArr[xCord][yCord].player = playerAvatar;
+			inArr[xCord][yCord].occupied = TRUE;
+		}
+		else 
+		{
+			printf("INVALID: this position is already occupied\n");
+            switchPlayers(turn);
+		}
+	}
 
-    return playerAvatar;
+    /*return playerAvatar;*/
 }
 
-void switchPlayers(int *turn, char *playerAvatar)
+char switchPlayers(int *turn)
 {
+	char playerAvatar;
     if(*turn == 1) 
     {
-        strcpy(playerAvatar, "X");
+		playerAvatar = 'X';
+        /*strcpy(playerAvatar, "X");*/
         /*switching it back to player two's turn now */
         *turn = 2;
     }
     else if(*turn == 2)
     {
-        strcpy(playerAvatar, "O");
+		playerAvatar = 'O';
+        /*strcpy(playerAvatar, "O");*/
         /*switching it back to player one's turn now */ 
         *turn = 1;
     }
+
+	return playerAvatar;
 }
 
 int validatePos(int  *pos, int rows, int cols)
