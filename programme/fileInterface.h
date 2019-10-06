@@ -5,8 +5,10 @@
     /*#define MAX_LINES 3*/
     #define FALSE 0
     #define TRUE !FALSE
+    #define INVALID -1
+    void setInvalid(int *inArr); 
     int* readGameSettings(char *fileName);
-    void processLine(char *line);
-    void parseLine(char *line, int *inArr);
+    void processLine(char *line, char **inArr);
+    void parseLine(char **inStrArr, int *settingNum);
     /*void freeFileInterFace(int ***gameValues);*/
 #endif

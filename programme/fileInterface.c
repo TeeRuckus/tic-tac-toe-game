@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include "fileInterface.h"
+#include "gameLogic.h"
+#include "memoryInterface.h"
 /*#include "myString.h"*/
 
 /*PURPOSE: to read in a game settings file which adheres to the following format
@@ -16,12 +18,15 @@ programme will stop*/
 
 int* readGameSettings(char *fileName)
 {
-    int *retValue, *gameSettings;
-    int lineCount, errorDecteded, stop, /*numReturned,*/ settingIndex;
-    /*char settingUpper;*/
-    char /*settingChar,*/ line[MAX_READ];
+    int *retValue, *gameSetting;
+    int lineCount, errorDecteded, stop, settingIndex;
+    char line[MAX_READ], **gameSettingsStr;
     FILE *inStrm; 
     inStrm = fopen(fileName, "r");
+
+    gameSetting = (int*)malloc(sizeof(int));
+    gameSettingsStr = (char**)malloc((sizeof(char*)) * MAX_SETTINGS);
+    retValue = (int*)malloc((sizeof(int)) * MAX_SETTINGS);
     if(inStrm != NULL)
     {
         /*a variable which can count the line numbers in the file therefore, if
@@ -33,48 +38,47 @@ int* readGameSettings(char *fileName)
         errorDecteded = FALSE;
         stop = FALSE;
         
-        /*multiplying MAX_SETTINGS by 2 as the name of the settings is going to
-        be stored inside here as characters are represented by integers 
-        therefore the format is <setting name>,<setting value> */
-        gameSettings = (int*)malloc((sizeof(int)) * (MAX_SETTINGS*2));
-        retValue = (int*)malloc((sizeof(int)) * MAX_SETTINGS);
-        /*M = (int**)malloc(sizeof(int*));
-        N = (int**)malloc(sizeof(int*));
-        K = (int**)malloc(sizeof(int*));*/
-
+        createChar2DArray(gameSettingsStr, MAX_SETTINGS, MAX_READ);
         /*choosing to use a while loop instead of a for loop because a while
         loop gives the function the ability to exit out the loop immedietely  
         when an error is dectected in the file*/
         do
         {
-            /*numReturned = fscanf(inStrm, "%d=%d",&gameSettings[settingIndex], 
-                                &gameSettings[settingIndex + 1]);*/
             fgets(line, MAX_READ, inStrm);
-            processLine(line);
+            processLine(line, gameSettingsStr);
             lineCount++;
             if(line != NULL)
             {
-                parseLine(line, gameSettings);
-                switch(line[0])
+                parseLine(gameSettingsStr, gameSetting);
+                if (*gameSetting > 0)
                 {
-                    case 'M': case 'm':
-                        /*we want the game setting, to actually point to the 
-                        value of its setting */
-                        retValue[0] = gameSettings[1];
-                        break;
+                    switch(gameSettingsStr[0][0])
+                    {
+                        case 'M': case 'm':
+                            /*we want the game setting, to actually point to the 
+                            value of its setting */
+                            retValue[0] = *gameSetting;
+                            break;
 
-                    case 'N': case 'n':
-                        retValue[1] = gameSettings[1];
-                        break;
+                        case 'N': case 'n':
+                            retValue[1] = *gameSetting;
+                            break;
 
-                    case 'K': case 'k':
-                        retValue[2] = gameSettings[1];
-                        break;
+                        case 'K': case 'k':
+                            retValue[2] = *gameSetting;
+                            break;
 
-                    default:
-                        printf("line %d:ERROR: invalid  setting format", lineCount);
-                        errorDecteded = TRUE;
-                        break;
+                        default:
+                            printf("line %d:ERROR: invalid  setting format", lineCount);
+                            errorDecteded = TRUE;
+                            break;
+                    }
+                }
+                else
+                {
+                    printf("ERROR: setting can't be <= 0:line:%d\n",lineCount); 
+                    setInvalid(retValue);
+                    errorDecteded = TRUE;
                 }
                 if(lineCount == MAX_SETTINGS)
                 {
@@ -89,7 +93,6 @@ int* readGameSettings(char *fileName)
                     perror(":ERROR: in processing last read line ");
                     errorDecteded = TRUE;
                 }
-                /*settingIndex = settingIndex + 2;*/
             }
             else if(feof(inStrm))
             {
@@ -106,74 +109,56 @@ int* readGameSettings(char *fileName)
             }
 
         }while((!errorDecteded) && (!stop));
+        fclose(inStrm);
     }
     else
     {
-        perror("ERORR: file doesn't exist - ");
+        perror("ERORR: file doesn't exist");
+        setInvalid(retValue);
     }
-    /*retValue[0] = M;
-    retValue[1] = N; 
-    retValue[2] = K;*/
-    fclose(inStrm);
     /* we don't need game settings anymore as retValue already has the game S
     settings sorted out in the order of M,N,K */
-    free(gameSettings);
-    /*free(M);
-    free(N);
-    free(K);*/
+    free(gameSetting);
+    free(gameSettingsStr);
 
-    gameSettings = NULL;
-    /*M = NULL;
-    N = NULL;
-    K = NULL;*/
+    gameSettingsStr = NULL;
+    gameSetting = NULL;
 
     return retValue;
 }
 
-void processLine(char *line)
+void setInvalid(int *inArr)
 {
-    int tokCount, stop;
-    char *retToks, *tok;
+    int ii;
+    for(ii = 0; ii < MAX_SETTINGS;ii++)
+    {
+        inArr[ii] = INVALID;
+    }
+}
+void processLine(char *line, char **inArr)
+{
+    /*char *retToks, *tok;
     retToks = (char*)malloc(sizeof(char) * MAX_READ);
-    /*tok = (char*)malloc(sizeof(char) * 2);*/
     tokCount = 0;
-    stop = FALSE;
+    stop = FALSE;*/
+    char *tok;
     
     /*get the first token of line*/
     tok = strtok(line, "=");
-    strcpy(&retToks[0], tok);
-    tokCount++;
+    strcpy(inArr[0], tok);
 
-    /*checking if there's anything else in the line */
-   /* while(tok != NULL && (!stop))
-    {
-        tokCount++;
-        if(tokCount > 3)
-        {
-            stop = TRUE;
-            retToks = NULL;
-        }
-        else
-        {
-            tok = strtok(NULL, " ");
-            strcpy(&retToks[tokCount], tok);
-        }
+    tok = strtok(NULL, "\n");
+    strcpy(inArr[1], tok);
 
-    }*/
-
-    tok = strtok(NULL, " ");
-    strcpy(&retToks[2], tok);
-
-    strcpy(line, retToks);
+    /*strcpy(line, retToks);
 
     free(retToks);
-    /*free(tok);*/
     retToks = NULL;
-    tok = NULL;
+    tok = NULL;*/
 }
 
 /*CHANGE THIS TO parseChar */ 
-void parseLine(char *line, int *inArr)
+void parseLine(char **inStrArr, int *settingNum)
 {
     /*int retOne;
     char *check = (char*)malloc(sizeof(char) * MAX_READ);
@@ -188,7 +173,24 @@ void parseLine(char *line, int *inArr)
         inArr[1] = 0;
     }*/
 
-    int parsedInt;
+    /*int parsedInt;
     parsedInt = line[2] - '0';
-    inArr[1] = parsedInt;
+    inArr[1] = parsedInt;*/
+
+    int num;
+    char *check = (char*)malloc(sizeof(char) * MAX_READ);
+
+    num = strtol(inStrArr[1], &check, 10);
+
+    if(*check == '\0' || *check == ' ')
+    {
+        *settingNum = num;
+    }
+    else
+    {
+        *settingNum = INVALID;
+    }
+    
+    /*free(check);
+    check = NULL;*/ 
 }
