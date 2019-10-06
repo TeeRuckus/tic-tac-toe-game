@@ -13,7 +13,7 @@ TEST = TestSuite
 CFLAGS = -g -Wall -ansi -pedantic -Werror
 OBJ = userInterface.o
 TEST_OBJ = TicTacToeTestSuite.o gameInterface.o gameLogic.o gameGraphics.o \
-memoryInterface.o 
+memoryInterface.o fileInterface.o
 game_OBJ = gameGraphics.o
 
 #if the user wants to enable all the debuggin features of the programme 
@@ -34,7 +34,7 @@ $(gameTest) : $(game_OBJ)
 userInterface.o : userInterface.c userInterface.h
 	$(CC) $(CFLAGS) -c userInterface.c
 
-fileInterface.o : fileInterface.c fileInterface.h myString.h
+fileInterface.o : fileInterface.c fileInterface.h 
 	$(CC) $(CFLAGS) -c fileInterface.c
 
 myString.o : myString.c myString.h

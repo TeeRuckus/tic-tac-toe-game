@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "fileInterface.h"
-#include "myString.h"
+/*#include "myString.h"*/
 
 /*PURPOSE: to read in a game settings file which adheres to the following format
 M=<integer> 
@@ -16,8 +16,9 @@ programme will stop*/
 
 int* readGameSettings(char *fileName)
 {
-    int **M, **N, **K, ***retValue, **gameSettings;
-    char settingUpper;
+    int *retValue, *gameSettings;
+    /*char settingUpper;*/
+    char settingChar, *line;
     FILE *inStrm; 
     inStrm = fopen(fileName, "r");
     if(inStrm != NULL)
@@ -35,45 +36,47 @@ int* readGameSettings(char *fileName)
         /*multiplying MAX_SETTINGS by 2 as the name of the settings is going to
         be stored inside here as characters are represented by integers 
         therefore the format is <setting name>,<setting value> */
-        gameSettings = (int**)malloc((sizeof(int*)) * (MAX_SETTINGS*2));
-        retValue = (int***)malloc((sizeof(int**)) * MAX_SETTINGS);
-        M = (int**)malloc(sizeof(int*));
+        gameSettings = (int*)malloc((sizeof(int)) * (MAX_SETTINGS*2));
+        retValue = (int*)malloc((sizeof(int)) * MAX_SETTINGS);
+        /*M = (int**)malloc(sizeof(int*));
         N = (int**)malloc(sizeof(int*));
-        K = (int**)malloc(sizeof(int*));
+        K = (int**)malloc(sizeof(int*));*/
 
         /*choosing to use a while loop instead of a for loop because a while
         loop gives the function the ability to exit out the loop immedietely  
         when an error is dectected in the file*/
         do
         {
-            numReturned = fscanf(inStrm, "%d=%d",gameSettings[settingIndex], 
-                                gameSettings[settingIndex + 1]);
+            numReturned = fscanf(inStrm, "%d=%d",&gameSettings[settingIndex], 
+                                &gameSettings[settingIndex + 1]);
             lineCount++;
             if(numReturned == 2)
             {
-                settingUpper = myToUpper(*(gameSettings[settingIndex]));
-                switch(settingUpper)
+                settingChar = (char)(gameSettings[settingIndex]);
+                
+                /*settingUpper = myToUpper(*(gameSettings[settingIndex]));*/
+                switch(settingChar)
                 {
-                    case 'M':
+                    case 'N': case 'n':
+                        retValue[0] = gameSettings[settingIndex + 1];
+                        break;
+
+                    case 'M': case 'm':
                         /*we want the game setting, to actually point to the 
                         value of its setting */
-                        M = (gameSettings + settingIndex + 1);
+                        retValue[1] = gameSettings[settingIndex + 1];
                         break;
 
-                    case 'N':
-                        N = (gameSettings + settingIndex + 1);
+                    case 'K': case 'k':
+                        retValue[2] = gameSettings[settingIndex + 1];
                         break;
 
-                    case 'K':
-                        K = (gameSettings + settingIndex + 1);
-                        break;
-
-                    default:F
+                    default:
                         printf("line %d:ERROR: invalid  setting format", lineCount);
                         errorDecteded = TRUE;
                         break;
                 }
-                if(lineCount == MAX_LINES)
+                if(lineCount == MAX_SETTINGS)
                 {
                     stop = TRUE;
                 }
@@ -90,7 +93,7 @@ int* readGameSettings(char *fileName)
             }
             else if(feof(inStrm))
             {
-                if(lineCount != MAX_LINES)
+                if(lineCount != MAX_SETTINGS)
                 {
                     printf("ERORR: not enough settings in file\n");
                     errorDecteded = TRUE;
@@ -108,31 +111,50 @@ int* readGameSettings(char *fileName)
     {
         perror("ERORR: file doesn't exist - ");
     }
-    retValue[0] = M;
+    /*retValue[0] = M;
     retValue[1] = N; 
-    retValue[2] = K;
+    retValue[2] = K;*/
     fclose(inStrm);
     /* we don't need game settings anymore as retValue already has the game S
     settings sorted out in the order of M,N,K */
     free(gameSettings);
-    free(M);
+    /*free(M);
     free(N);
-    free(K);
+    free(K);*/
 
     gameSettings = NULL;
-    M = NULL;
+    /*M = NULL;
     N = NULL;
-    K = NULL;
+    K = NULL;*/
 
     return retValue;
 }
 
-/*PURPOSE: is to free all dynamically allocated memory by the fileInterface.
-The rational behind this is that the vales read in by the fileInterface 
-need to be used thorughout the whole programme, and we need the value read even
-after the readGameSettings function returns*/
-void freeFileInterFace(int ***gameValues)
+int processLine(char *line)
 {
-    free(gameValues);
-    gameValues = NULL;
+    int numElements, tokCount, stop;
+    char *tok;
+    char retToks[3];
+    tokCount = 0;
+    
+    tok = strtok(line, "=");
+    strcpy(retToks[0], tok);
+    tokCount++;
+
+    /*checking if there's anything else in the line */
+    while(tok != NULL && tokCount != 2)
+    {
+        tok = strtok(NULL, "=");
+        retToks[2] = tok;
+        if(tookCount == 2)
+        {
+            stop = TRUE;
+        }
+        tokCount++;
+    }
+}
+
+int *parseToInt(char *line)
+{
+
 }
