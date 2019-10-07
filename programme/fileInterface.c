@@ -19,7 +19,7 @@ programme will stop*/
 int* readGameSettings(char *fileName)
 {
     int *retValue, *gameSetting, mSettingAcess, nSettingAcess, kSettingAcesss,
-    lineCount, errorDecteded, stop, settingIndex, *isValidLine;
+    lineCount, errorDecteded, stop, /*settingIndex,*/ *isValidLine;
     char line[MAX_READ], **gameSettingsStr;
     FILE *inStrm; 
     inStrm = fopen(fileName, "r");
@@ -38,7 +38,7 @@ int* readGameSettings(char *fileName)
         determine where the error occured */
 
         lineCount = 0;
-        settingIndex = 0;
+        /*settingIndex = 0;*/
         errorDecteded = FALSE;
         stop = FALSE;
         

@@ -4,6 +4,8 @@
 #include "TicTacToeTestSuite.h"
 #include "fileInterface.h"
 #include "gameInterface.h"
+#include "LinkList.h"
+#include "logInterface.h"
 
 int main(void)
 {
@@ -19,6 +21,10 @@ int main(void)
     numTests++;
     printf("TEST 1: ");
     gameSettings = fileInterfaceTest(numPassed);
+
+    numTests++; 
+    printf("TEST 2: ");
+    displayLogTest();
 
 	numTests++;
     printf("TEST :\n");
@@ -178,4 +184,62 @@ int *fileInterfaceTest(int *numPassed)
 	fileName = NULL;
 
     return retSettings;
+}
+
+void displayLogTest()
+{
+    int ii, logCount, turn, pos[2], *numMoves, *gameNum;
+    char playerOne[2], playerTwo[2];
+    LinkedList *testLogList;
+    int logMovesOne[32] = {2,1,0,0,2,0,2,2,1,1,0,1,0,2,2,3,1,3,1,2,1,0,3,0,3,1,
+                           3,2,0,2,3,3};
+    /*int logMovesTwo[27] = {0,0,2,1,5,4,4,5,5,3,2,1,9,3,2,6,6,7,3,2,3,5,6,3,5
+                          ,5,6}; */
+    int randomSettings[3] = {10, 10, 3};
+    numMoves = (int*)malloc(sizeof(int));
+    gameNum = (int*)malloc(sizeof(int));
+    
+    printf("display Log test\n");
+    ii = 0;
+    turn = 1;
+    logCount = 0;
+
+    *numMoves = 0;
+    *gameNum = 1;
+
+    strcpy(playerOne, "X");
+    strcpy(playerTwo, "O"); 
+
+    testLogList = createLinkedList(); 
+
+    for(ii = 0; ii < 32; ii++)
+    {
+        if(turn == 1)
+        {
+            (*numMoves)++;
+            pos[0] = logMovesOne[logCount];
+            pos[1] = logMovesOne[logCount + 1]; 
+            logGame(testLogList, randomSettings, playerOne, pos, numMoves, 
+            gameNum);
+            logCount = logCount + 2;
+            turn = 2;
+        }
+        else if (turn == 2)
+        {
+            numMoves++;
+            pos[0] = logMovesOne[logCount];
+            pos[1] = logMovesOne[logCount + 1]; 
+            logGame(testLogList, randomSettings, playerTwo, pos, numMoves, 
+            gameNum);
+            logCount = logCount + 2;
+            turn = 1;
+        }
+    }
+    
+    displayLog(testLogList, printLogStruct);
+    free(numMoves);
+    free(gameNum);
+
+    numMoves = NULL;
+    gameNum = NULL;
 }
