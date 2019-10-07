@@ -5,7 +5,6 @@
 #PURPOSE: A make file to run all the download relateded programmes 
 
 # Makefile Variables
-
 CC = gcc
 EXEC = TicTacToe
 gameTest = gameGraphics

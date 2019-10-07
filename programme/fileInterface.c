@@ -18,14 +18,18 @@ programme will stop*/
 
 int* readGameSettings(char *fileName)
 {
-    int *retValue, *gameSetting;
-    int lineCount, errorDecteded, stop, settingIndex;
+    int *retValue, *gameSetting, mSettingAcess, nSettingAcess, kSettingAcesss,
+    lineCount, errorDecteded, stop, settingIndex, *isValidLine;
     char line[MAX_READ], **gameSettingsStr;
     FILE *inStrm; 
     inStrm = fopen(fileName, "r");
 
+    mSettingAcess = 0;
+    nSettingAcess = 0;
+    kSettingAcesss = 0;
     gameSetting = (int*)malloc(sizeof(int));
     gameSettingsStr = (char**)malloc((sizeof(char*)) * MAX_SETTINGS);
+    isValidLine = (int*)malloc(sizeof(int));
     retValue = (int*)malloc((sizeof(int)) * MAX_SETTINGS);
     if(inStrm != NULL)
     {
@@ -45,9 +49,9 @@ int* readGameSettings(char *fileName)
         do
         {
             fgets(line, MAX_READ, inStrm);
-            processLine(line, gameSettingsStr);
+            processLine(line, gameSettingsStr, isValidLine);
             lineCount++;
-            if(line != NULL)
+            if(line != NULL && *isValidLine == VALID)
             {
                 parseLine(gameSettingsStr, gameSetting);
                 if (*gameSetting > 0)
@@ -58,19 +62,23 @@ int* readGameSettings(char *fileName)
                             /*we want the game setting, to actually point to the 
                             value of its setting */
                             retValue[0] = *gameSetting;
+                            mSettingAcess++;
                             break;
 
                         case 'N': case 'n':
                             retValue[1] = *gameSetting;
+                            nSettingAcess++;
                             break;
 
                         case 'K': case 'k':
                             retValue[2] = *gameSetting;
+                            kSettingAcesss++;
                             break;
 
                         default:
-                            printf("line %d:ERROR: invalid  setting format", lineCount);
+                            printf("line %d:ERROR: invalid  setting format\n", lineCount);
                             errorDecteded = TRUE;
+                            setInvalid(retValue);
                             break;
                     }
                 }
@@ -84,11 +92,20 @@ int* readGameSettings(char *fileName)
                 {
                     stop = TRUE;
                 }
+                if(isDuplicates(mSettingAcess, nSettingAcess, kSettingAcesss) 
+                == TRUE)
+                {
+                    setInvalid(retValue);
+                    errorDecteded = TRUE;
+                    printf("ERROR: duplicate in file found in line:%d\n",
+                    lineCount);
+                }
                 /*just an extra cautios check to ensure that no errors have 
                 occured in processing the last line. If an error has occured,
                 the function should stop reading in the file */
                 if(ferror(inStrm))
                 {
+                    setInvalid(retValue);
                     printf("line %d", lineCount);
                     perror(":ERROR: in processing last read line ");
                     errorDecteded = TRUE;
@@ -98,14 +115,17 @@ int* readGameSettings(char *fileName)
             {
                 if(lineCount != MAX_SETTINGS)
                 {
+                    setInvalid(retValue);
                     printf("ERORR: not enough settings in file\n");
                     errorDecteded = TRUE;
                 }
             }
             else
             {
+                /*THIS ERROR MESSAGE CAN BE MISLEADIN*/
                 printf("line %d:ERROR: too many arguments\n", lineCount);
                 stop = TRUE;
+                setInvalid(retValue);
             }
 
         }while((!errorDecteded) && (!stop));
@@ -120,9 +140,11 @@ int* readGameSettings(char *fileName)
     settings sorted out in the order of M,N,K */
     free(gameSetting);
     free(gameSettingsStr);
+    free(isValidLine);
 
     gameSettingsStr = NULL;
     gameSetting = NULL;
+    isValidLine = NULL;
 
     return retValue;
 }
@@ -135,26 +157,32 @@ void setInvalid(int *inArr)
         inArr[ii] = INVALID;
     }
 }
-void processLine(char *line, char **inArr)
+void processLine(char *line, char **inArr, int *lineRead)
 {
-    /*char *retToks, *tok;
-    retToks = (char*)malloc(sizeof(char) * MAX_READ);
-    tokCount = 0;
-    stop = FALSE;*/
     char *tok;
     
     /*get the first token of line*/
     tok = strtok(line, "=");
-    strcpy(inArr[0], tok);
+    if(tok != NULL)
+    {
+        strcpy(inArr[0], tok);
+        *lineRead = VALID;
+    }
+    else
+    {
+        *lineRead  = INVALID;
+    }
 
     tok = strtok(NULL, "\n");
-    strcpy(inArr[1], tok);
-
-    /*strcpy(line, retToks);
-
-    free(retToks);
-    retToks = NULL;
-    tok = NULL;*/
+    if(tok != NULL)
+    {
+        strcpy(inArr[1], tok);
+        *lineRead = VALID;
+    }
+    else
+    {
+        *lineRead = INVALID;
+    }
 }
 
 /*CHANGE THIS TO parseChar */ 
@@ -193,4 +221,15 @@ void parseLine(char **inStrArr, int *settingNum)
     
     /*free(check);
     check = NULL;*/ 
+}
+
+int isDuplicates(int accessNumOne , int accessNumTwo, int accessNumThree)
+{
+    int duplicate;
+    duplicate = FALSE;
+    if(accessNumOne > 1 || accessNumTwo > 1 || accessNumThree > 1)
+    {
+        duplicate = TRUE;
+    }
+    return duplicate;
 }

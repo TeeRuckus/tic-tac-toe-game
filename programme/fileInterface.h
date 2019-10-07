@@ -6,9 +6,10 @@
     #define FALSE 0
     #define TRUE !FALSE
     #define INVALID -1
+    #define VALID !INVALID
     void setInvalid(int *inArr); 
     int* readGameSettings(char *fileName);
-    void processLine(char *line, char **inArr);
+    void processLine(char *line, char **inArr, int *lineRead);
     void parseLine(char **inStrArr, int *settingNum);
-    /*void freeFileInterFace(int ***gameValues);*/
+    int isDuplicates(int accessNumOne , int accessNumTwo, int accessNumThree);
 #endif
