@@ -67,14 +67,20 @@ int validatePos(int  *pos, int rows, int cols)
 }
 
 /*FUNCTION IS NOT FINISHED YET. IT JUST ALWAYS ASSUMES THAT IT'S A DRAW */
-int determineWinner(player **board, int numToWin, int *playerMove)
+int determineWinner(player **board, int *playerMoves)
 {
     int valid;
     valid = FALSE;
+    if(*playerMoves == 2)
+    {
+        valid = TRUE;
+    }
+
+    (*playerMoves)++;
     return valid;
 }
 
-int isDraw(player **gameBoard, int numToWin, int *playerMove)
+/*int isDraw(player **gameBoard, int numToWin, int *playerMove)
 {
     return 0;
 }
@@ -102,4 +108,4 @@ int hasWonDiagonally(player **gameBoard, int numToWin, int *playerMove)
 {
     return 0;
 } 
-
+*/ 

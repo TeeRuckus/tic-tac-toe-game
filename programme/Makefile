@@ -9,7 +9,7 @@ CC = gcc
 EXEC = TicTacToe
 gameTest = gameGraphics
 TEST = TestSuite
-CFLAGS = -g -Wall -ansi -pedantic -Werror
+CFLAGS = -g -Wall -ansi -pedantic -Werror -std=c89
 OBJ = userInterface.o
 TEST_OBJ = TicTacToeTestSuite.o gameInterface.o gameLogic.o gameGraphics.o \
 memoryInterface.o fileInterface.o LinkList.o logInterface.o

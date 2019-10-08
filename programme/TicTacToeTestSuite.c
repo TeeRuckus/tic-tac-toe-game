@@ -12,7 +12,7 @@ int main(void)
     int numTests, *numPassed, *gameSettings;
     /*int gameSettings[2] = {5,7};*/
 
-    gameSettings = (int*)malloc(MAX_SETTINGS * sizeof(int));
+    gameSettings = (int*)malloc(MAX_SETTINGS * (sizeof(int)));
     numPassed = (int*)malloc(sizeof(int));
 
     numTests = 0;
@@ -20,11 +20,11 @@ int main(void)
 
     numTests++;
     printf("TEST 1: ");
-    gameSettings = fileInterfaceTest(numPassed);
+    fileInterfaceTest(numPassed, gameSettings);
 
     numTests++; 
     printf("TEST 2: ");
-   /* displayLogTest();*/ 
+    /*displayLogTest();*/
 
 	numTests++;
     printf("TEST :\n");
@@ -39,15 +39,14 @@ int main(void)
     return 0;
 }
 
-int *fileInterfaceTest(int *numPassed)
+void fileInterfaceTest(int *numPassed, int *retSettings)
 {
     char *fileName = (char*)malloc(sizeof(char)*50);
-    int *retSettings = (int*)malloc(sizeof(int) * MAX_SETTINGS); 
     printf("fileInterfaceTest\n");
 
     /*testing for a file which doesn't exist*/
     strncpy(fileName, "name.txt",9);
-    retSettings = readGameSettings(fileName);
+    readGameSettings(fileName, retSettings);
 
     if(retSettings[0] == INVALID && retSettings[1] == INVALID && 
     retSettings[2] == INVALID)
@@ -62,7 +61,7 @@ int *fileInterfaceTest(int *numPassed)
 
     /*trying to read in a negative number from a file*/
     strncpy(fileName, "gameSettingsInvalid2.txt",25);
-    retSettings = readGameSettings(fileName);
+    readGameSettings(fileName, retSettings);
 
     if(retSettings[0] == INVALID && retSettings[1] == INVALID &&
     retSettings[2] == INVALID)
@@ -78,7 +77,7 @@ int *fileInterfaceTest(int *numPassed)
 
     /*testing gameSetting = 0*/
     strncpy(fileName, "gameSettingsInvalid3.txt",25);
-    retSettings = readGameSettings(fileName);
+    readGameSettings(fileName, retSettings);
     if(retSettings[0] == INVALID && retSettings[1] == INVALID &&
     retSettings[2] == INVALID)
     {
@@ -93,7 +92,7 @@ int *fileInterfaceTest(int *numPassed)
 
     /*testing dupilcate settings in file */
     strncpy(fileName, "gameSettingsInvalid4.txt",25); 
-    retSettings = readGameSettings(fileName);
+    readGameSettings(fileName, retSettings);
     if(retSettings[0] == INVALID && retSettings[1] == INVALID &&
     retSettings[2] == INVALID)
     {
@@ -107,7 +106,7 @@ int *fileInterfaceTest(int *numPassed)
 
     /*testing setting with random text in it*/
     strncpy(fileName, "gameSettingsInvalid.txt",24);
-    retSettings = readGameSettings(fileName);
+    readGameSettings(fileName, retSettings);
     if(retSettings[0] == INVALID && retSettings[1] == INVALID &&
     retSettings[2] == INVALID)
     {
@@ -121,7 +120,7 @@ int *fileInterfaceTest(int *numPassed)
 
     /*testing a file with only one setting in it*/
     strncpy(fileName, "gameSettingsInvalid5.txt",25);
-    retSettings = readGameSettings(fileName);
+    readGameSettings(fileName, retSettings);
 
     if(retSettings[0] == INVALID && retSettings[1] == INVALID &&
     retSettings[2] == INVALID)
@@ -136,7 +135,7 @@ int *fileInterfaceTest(int *numPassed)
 
     /*testing a file which has an invalid setting name*/
     strncpy(fileName, "gameSettingsInvalid6.txt",25);
-    retSettings = readGameSettings(fileName);
+    readGameSettings(fileName, retSettings);
 
 
     if(retSettings[0] == INVALID && retSettings[1] == INVALID &&
@@ -151,7 +150,7 @@ int *fileInterfaceTest(int *numPassed)
     printf("\n");
 
     strncpy(fileName, "gameSettingsTestValid.txt",26 );
-    retSettings = readGameSettings(fileName);
+    readGameSettings(fileName, retSettings);
     if(retSettings[0] == 5 && retSettings[1] == 4  && retSettings[2] == 3)
     {
         printf("PASSED: reading a valid file in the order of m,n,k\n");
@@ -164,7 +163,7 @@ int *fileInterfaceTest(int *numPassed)
     printf("\n");
 
     strncpy(fileName, "gameSettingsTestValid2.txt",27);
-    retSettings = readGameSettings(fileName);
+    readGameSettings(fileName, retSettings);
 
     if(retSettings[0] == 10 && retSettings[1] == 5 && retSettings[2] == 4)
     {
@@ -183,7 +182,6 @@ int *fileInterfaceTest(int *numPassed)
 	free(fileName);
 	fileName = NULL;
 
-    return retSettings;
 }
 
 void displayLogTest()
@@ -214,24 +212,21 @@ void displayLogTest()
 
     for(ii = 0; ii < 32; ii++)
     {
+		pos[0] = logMovesOne[logCount];
+		pos[1] = logMovesOne[logCount + 1]; 
+		(*numMoves)++;
+		logCount = logCount + 2;
+
         if(turn == 1)
         {
-            (*numMoves)++;
-            pos[0] = logMovesOne[logCount];
-            pos[1] = logMovesOne[logCount + 1]; 
             logGame(testLogList, randomSettings, playerOne, pos, numMoves, 
             gameNum);
-            logCount = logCount + 2;
             turn = 2;
         }
         else if (turn == 2)
         {
-            numMoves++;
-            pos[0] = logMovesOne[logCount];
-            pos[1] = logMovesOne[logCount + 1]; 
             logGame(testLogList, randomSettings, playerTwo, pos, numMoves, 
             gameNum);
-            logCount = logCount + 2;
             turn = 1;
         }
     }

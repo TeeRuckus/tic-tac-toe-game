@@ -6,12 +6,10 @@
 
 void drawGameBoard(player **placements, int *gameSettings, int *turn)
 {
-    void *playerPos = malloc(sizeof(int));
+    int *playerPos;
     playerPos = NULL;
 
     redrawGameBoard(placements, gameSettings, playerPos, turn);
-
-    free(playerPos);
 }
 
 void redrawGameBoard(player **placements, int *gameSettings, int  *pos, int *turn)

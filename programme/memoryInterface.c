@@ -11,8 +11,7 @@ void free2DArray(player **inArr, int rows)
         inArr[ii] = NULL;
     }
 
-    free(inArr);
-    inArr = NULL;
+	inArr = NULL;
 }
 
 
@@ -34,4 +33,16 @@ void createChar2DArray(char **inArr, int rows, int cols)
     {
         inArr[ii] = (char*)malloc(cols * sizeof(char));
     }
+}
+
+void free2DCharArray(char **inArr, int rows) 
+{
+	int ii; 
+	for(ii = 0; ii < rows; ii++) 
+	{
+		free(inArr[ii]);
+		inArr[ii] = NULL;
+	}
+
+	inArr = NULL;
 }

@@ -4,4 +4,5 @@
 	void create2DArray(player **inArr,int rows, int cols);
     void createChar2DArray(char **inArr, int rows, int cols);
     void createChar2DArray(char **inArr, int rows, int cols);
+	void free2DCharArray(char **inArr, int rows); 
 #endif

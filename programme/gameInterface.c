@@ -7,15 +7,19 @@
 
 void playGame(int *gameSettings)
 {
-    int *turn = (int*)malloc(sizeof(int));
+    int *turn, *moves;
     int  exit;
     int playerPos[2];
     player **gameBoard;
+    
+	turn = (int*)malloc(sizeof(int));
+    moves = (int*)malloc(sizeof(int));
+    gameBoard = (player**)malloc(gameSettings[0] * sizeof(player*));
 
     /*we're always going to start the game with player one*/
     *turn = 1;
     exit = FALSE;
-    gameBoard = (player**)malloc(gameSettings[0] * sizeof(player*));
+    *moves = 0;
 
     create2DArray(gameBoard, gameSettings[0], gameSettings[1]);
     clearGameBoard(gameBoard, gameSettings[0], gameSettings[1]);
@@ -28,7 +32,7 @@ void playGame(int *gameSettings)
         if(validatePos(playerPos, gameSettings[0], gameSettings[1]))
         {
             redrawGameBoard(gameBoard, gameSettings, playerPos, turn);
-            exit = determineWinner(gameBoard, gameSettings[2]);
+            exit = determineWinner(gameBoard, moves);
         }
         else
         {
@@ -44,6 +48,9 @@ void playGame(int *gameSettings)
     /*MAKE THIS INTO ONE FUNCTION SO IT'S A LOT CLEANER*/
     free2DArray(gameBoard, gameSettings[0]);
     free(turn);
+    free(moves);
+
+    moves = NULL;
     turn = NULL;
 }
 

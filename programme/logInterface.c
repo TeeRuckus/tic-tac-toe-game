@@ -16,26 +16,22 @@ void logGame(LinkedList *inList, int *inSettings, char *playerAvatar, int *pos,
     char initLogMssg[LOG_MSSG];
     gameLog *nwLog;
     nwLog = NULL;
+	(*moves)++;
     /*when the game is just beggining */
     if(*moves == 0)
     {
         sprintf(initLogMssg,"SETTINGS\n\tM:%d\n\tN:%d\n\tK:%d\n\nGAME:%d",
         inSettings[0], inSettings[1], inSettings[2], *numGames); 
         strcpy(nwLog -> mssg, initLogMssg);
-        /*nwLog -> turn = "";
-        nwLog -> player = "";
-        nwLog -> pos = "";*/ 
         strcpy(nwLog -> turn, "");
         strcpy(nwLog -> player, "");
         strcpy(nwLog -> pos, "");
         insertFirst(inList, nwLog);
-        (*moves)++;
     }
     /*when the game already has commenced */
     else
     {
         insertLog(inList, playerAvatar, pos, moves);
-        (*moves )++; 
     }
 }
 

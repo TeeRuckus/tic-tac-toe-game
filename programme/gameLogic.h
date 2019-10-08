@@ -8,10 +8,11 @@
         char player;
         int occupied;
     }player;
+
 	void playerMove(player **inArr, int *playPos, int *turn);
 	char switchPlayers(int *turn);
 	int validatePos(int  *pos, int rows, int cols);
-	int determineWinner(player **board, int numToWin);
+	int determineWinner(player **board, int *playerMoves);
     int isDraw(player **gameBoard, int numToWin);
     int hasWonVertically(player **gameBoard, int numToWin);
     int hasWonHorizontally(player **gameBoard, int numTowWin);

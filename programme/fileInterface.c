@@ -16,9 +16,9 @@ whereby the characters in the folder are case insentive and can be placed in any
 order. Additionally, if an error occurs during reading the settings, the
 programme will stop*/
 
-int* readGameSettings(char *fileName)
+void readGameSettings(char *fileName, int *retValue)
 {
-    int *retValue, *gameSetting, mSettingAcess, nSettingAcess, kSettingAcesss,
+    int *gameSetting, mSettingAcess, nSettingAcess, kSettingAcesss,
     lineCount, errorDecteded, stop, /*settingIndex,*/ *isValidLine;
     char line[MAX_READ], **gameSettingsStr;
     FILE *inStrm; 
@@ -30,7 +30,6 @@ int* readGameSettings(char *fileName)
     gameSetting = (int*)malloc(sizeof(int));
     gameSettingsStr = (char**)malloc((sizeof(char*)) * MAX_SETTINGS);
     isValidLine = (int*)malloc(sizeof(int));
-    retValue = (int*)malloc((sizeof(int)) * MAX_SETTINGS);
     if(inStrm != NULL)
     {
         /*a variable which can count the line numbers in the file therefore, if
@@ -141,12 +140,12 @@ int* readGameSettings(char *fileName)
     free(gameSetting);
     free(gameSettingsStr);
     free(isValidLine);
+    free2DCharArray(gameSettingsStr, MAX_SETTINGS);
 
     gameSettingsStr = NULL;
     gameSetting = NULL;
     isValidLine = NULL;
 
-    return retValue;
 }
 
 void setInvalid(int *inArr)
@@ -188,25 +187,9 @@ void processLine(char *line, char **inArr, int *lineRead)
 /*CHANGE THIS TO parseChar */ 
 void parseLine(char **inStrArr, int *settingNum)
 {
-    /*int retOne;
-    char *check = (char*)malloc(sizeof(char) * MAX_READ);
-    retOne = strtol((&line[2]), &check, MAX_READ);
-    if(*check == '\0')
-    {
-        inArr[1] = retOne;
-    }
-    else
-    {
-        inArr[0] = 0;
-        inArr[1] = 0;
-    }*/
-
-    /*int parsedInt;
-    parsedInt = line[2] - '0';
-    inArr[1] = parsedInt;*/
-
     int num;
-    char *check = (char*)malloc(sizeof(char) * MAX_READ);
+    char *check;/* = (char*)malloc(sizeof(char) * MAX_READ);*/
+    check = NULL;
 
     num = strtol(inStrArr[1], &check, 10);
 
