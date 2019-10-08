@@ -1,7 +1,5 @@
 #ifndef LINKLIST_H
 #define LINKLIST_H
-
-	/*EXPLAIN WHAT THESE FUNCTIONS DO */
     typedef struct LinkListNode
     {
         void *value;
@@ -9,8 +7,7 @@
         struct LinkListNode *prevRef;
 
     }LinkListNode;
-	
-	/*EXPLAIN WHAT THESE FUNCTIONS DO*/
+
     typedef struct
     {
         LinkListNode *head;
@@ -37,6 +34,7 @@
     void printFloat(void *data); 
     void printChar(void *data);
 	void printString(void *data);
-    void freeLinkedList(LinkedList *list);
-    void freeNodeRec(LinkListNode *node);
+    void freeLinkedList(LinkedList *list, funcPtr fptr);
+    void freeNodeRec(LinkListNode *node, funcPtr fptr);
+    void freePrimitives(void *data);
 #endif

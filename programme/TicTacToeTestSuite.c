@@ -12,7 +12,7 @@ int main(void)
     int numTests, *numPassed, *gameSettings;
     /*int gameSettings[2] = {5,7};*/
 
-    gameSettings = (int*)calloc(MAX_SETTINGS, sizeof(int));
+    gameSettings = (int*)malloc(MAX_SETTINGS * sizeof(int));
     numPassed = (int*)malloc(sizeof(int));
 
     numTests = 0;
@@ -24,7 +24,7 @@ int main(void)
 
     numTests++; 
     printf("TEST 2: ");
-    displayLogTest();
+   /* displayLogTest();*/ 
 
 	numTests++;
     printf("TEST :\n");

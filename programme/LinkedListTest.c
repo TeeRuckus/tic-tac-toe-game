@@ -136,6 +136,8 @@ int main(int argc, char const *argv[])
         numPassed++;
     }
 
+    free(value);
+
     display(list, printString);
     /*REMOVING FIRST*/
     printf("Remove First: ");
@@ -149,6 +151,8 @@ int main(int argc, char const *argv[])
     {
         printf("FAILED\n");
     }
+
+    free(value);
     
     display(list, printString);
     
@@ -163,6 +167,8 @@ int main(int argc, char const *argv[])
         printf("FAILED\n");
     }
 
+    free(value);
+
     display(list, printString);
     
     printf("inserting element..\n");
@@ -172,6 +178,7 @@ int main(int argc, char const *argv[])
     value = (char*)removeFirst(list);
     if(strncmp(value, input4, strlen(input4)+1) == 0)
     {
+
         printf("PASSED\n");
     }
     else
@@ -179,20 +186,12 @@ int main(int argc, char const *argv[])
         printf("FAILED\n");
     }
     display(list, printString);
+    free(value);
 
     /*PRINTING*/
 
     /*FREEING*/
-    freeLinkedList(list);
-    free(input1);
-    free(input2);
-    free(input3);
-    free(input4);
-
-    input1 = NULL;
-    input2 = NULL;
-    input3 = NULL;
-    input4 = NULL;
+    freeLinkedList(list, freePrimitives);
 
     return 0;
 }

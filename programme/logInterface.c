@@ -22,9 +22,12 @@ void logGame(LinkedList *inList, int *inSettings, char *playerAvatar, int *pos,
         sprintf(initLogMssg,"SETTINGS\n\tM:%d\n\tN:%d\n\tK:%d\n\nGAME:%d",
         inSettings[0], inSettings[1], inSettings[2], *numGames); 
         strcpy(nwLog -> mssg, initLogMssg);
-        nwLog -> turn = "";
+        /*nwLog -> turn = "";
         nwLog -> player = "";
-        nwLog -> pos = "";
+        nwLog -> pos = "";*/ 
+        strcpy(nwLog -> turn, "");
+        strcpy(nwLog -> player, "");
+        strcpy(nwLog -> pos, "");
         insertFirst(inList, nwLog);
         (*moves)++;
     }
@@ -45,10 +48,12 @@ void insertLog(LinkedList *inList, char *playerAvatar, int *pos,
     gameLog gameEntry;
 
     /*intialising the enteries of gameLog*/
-    gameEntry.turn = "";
+    /*gameEntry.turn = "";
     gameEntry.player = "";
-    gameEntry.pos = "";
-
+    gameEntry.pos = "";*/
+    strcpy(gameEntry.turn, "");
+    strcpy(gameEntry.player, "");
+    strcpy(gameEntry.pos, "");
     /*turn = (char*)malloc(sizeof(char) * MAX_LINE);
     player = (char*)malloc(sizeof(char) * MAX_LINE);
     playerPos = (char*)malloc(sizeof(char) * MAX_LINE);*/

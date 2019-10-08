@@ -28,7 +28,7 @@ void playGame(int *gameSettings)
         if(validatePos(playerPos, gameSettings[0], gameSettings[1]))
         {
             redrawGameBoard(gameBoard, gameSettings, playerPos, turn);
-            exit = determineWinner(gameBoard);
+            exit = determineWinner(gameBoard, gameSettings[2]);
         }
         else
         {
