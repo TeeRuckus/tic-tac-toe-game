@@ -12,7 +12,6 @@ void playerMove(player **inArr, int *playPos, int *turn)
 		int xCord, yCord;
 		xCord = playPos[0];
 		yCord = playPos[1];
-		/*playerAvatar = (char*)malloc((sizeof(char)) * 2);*/
 		playerAvatar = switchPlayers(turn);
 
 		if(playPos == NULL)
@@ -30,8 +29,6 @@ void playerMove(player **inArr, int *playPos, int *turn)
             switchPlayers(turn);
 		}
 	}
-
-    /*return playerAvatar;*/
 }
 
 char switchPlayers(int *turn)

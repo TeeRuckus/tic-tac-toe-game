@@ -10,7 +10,8 @@ void free2DArray(player **inArr, int rows)
         free(inArr[ii]);
         inArr[ii] = NULL;
     }
-
+    
+    free(inArr);
 	inArr = NULL;
 }
 
@@ -40,9 +41,9 @@ void free2DCharArray(char **inArr, int rows)
 	int ii; 
 	for(ii = 0; ii < rows; ii++) 
 	{
-		freeinArr[ii]);
+		free(inArr[ii]);
 		inArr[ii] = NULL;
 	}
-
+    free(inArr);
 	inArr = NULL;
 }

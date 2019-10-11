@@ -27,10 +27,13 @@ void readGameSettings(char *fileName, int *retValue)
     mSettingAcess = 0;
     nSettingAcess = 0;
     kSettingAcesss = 0;
+
     gameSetting = (int*)malloc(sizeof(int));
     gameSettingsStr = (char**)malloc((sizeof(char*)) * MAX_SETTINGS);
     isValidLine = (int*)malloc(sizeof(int));
+
     createChar2DArray(gameSettingsStr, MAX_SETTINGS, MAX_READ);
+
     if(inStrm != NULL)
     {
         /*a variable which can count the line numbers in the file therefore, if
@@ -137,6 +140,7 @@ void readGameSettings(char *fileName, int *retValue)
     }
     /* we don't need game settings anymore as retValue already has the game S
     settings sorted out in the order of M,N,K */
+
     free(gameSetting);
     free(isValidLine);
     free2DCharArray(gameSettingsStr, MAX_SETTINGS);
@@ -187,7 +191,7 @@ void processLine(char *line, char **inArr, int *lineRead)
 void parseLine(char **inStrArr, int *settingNum)
 {
     int num;
-    char *check;/* = (char*)malloc(sizeof(char) * MAX_READ);*/
+    char *check;
     check = NULL;
 
     num = strtol(inStrArr[1], &check, 10);

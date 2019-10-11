@@ -43,8 +43,6 @@ void playGame(int *gameSettings)
         }
     }while(!exit);
 
-
-
     /*MAKE THIS INTO ONE FUNCTION SO IT'S A LOT CLEANER*/
     free2DArray(gameBoard, gameSettings[0]);
     free(turn);
