@@ -19,9 +19,7 @@ LinkedList* createLinkedList()
 /*ASSERTS: returns the number of LinkedList node in the link list */
 int getCount(LinkedList *list)
 {
-    int count; 
-    count = list -> count;
-    return count;
+    return list -> count;
 }
 
 /*ASSERTS: it adds a linked list node to the head reference of the linked list*/

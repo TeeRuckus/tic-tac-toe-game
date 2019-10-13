@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "myBool.h"
 #include <string.h>
 #include "fileInterface.h"
 #include "gameLogic.h"
@@ -19,7 +20,10 @@ programme will stop*/
 void readGameSettings(char *fileName, int *retValue)
 {
     int *gameSetting, mSettingAcess, nSettingAcess, kSettingAcesss,
-    lineCount, errorDecteded, stop, *isValidLine;
+    lineCount;
+    Boolean errorDecteded, stop;
+    ValidStatus *isValidLine;
+
     char line[MAX_READ], **gameSettingsStr;
     FILE *inStrm; 
     inStrm = fopen(fileName, "r");
@@ -30,7 +34,7 @@ void readGameSettings(char *fileName, int *retValue)
 
     gameSetting = (int*)malloc(sizeof(int));
     gameSettingsStr = (char**)malloc((sizeof(char*)) * MAX_SETTINGS);
-    isValidLine = (int*)malloc(sizeof(int));
+    isValidLine = (ValidStatus*)malloc(sizeof(ValidStatus));
 
     createChar2DArray(gameSettingsStr, MAX_SETTINGS, MAX_READ);
 
@@ -39,9 +43,7 @@ void readGameSettings(char *fileName, int *retValue)
         /*a variable which can count the line numbers in the file therefore, if
         an error happens in processing the file, the error handling methods can
         determine where the error occured */
-
         lineCount = 0;
-        /*settingIndex = 0;*/
         errorDecteded = FALSE;
         stop = FALSE;
         
@@ -53,9 +55,10 @@ void readGameSettings(char *fileName, int *retValue)
             fgets(line, MAX_READ, inStrm);
             processLine(line, gameSettingsStr, isValidLine);
             lineCount++;
-            if(line != NULL && *isValidLine == VALID)
+            if(line != NULL && *isValidLine)
             {
                 parseLine(gameSettingsStr, gameSetting);
+                /*if the gameSetting is a positive number*/
                 if (*gameSetting > 0)
                 {
                     switch(gameSettingsStr[0][0])
@@ -94,8 +97,7 @@ void readGameSettings(char *fileName, int *retValue)
                 {
                     stop = TRUE;
                 }
-                if(isDuplicates(mSettingAcess, nSettingAcess, kSettingAcesss) 
-                == TRUE)
+                if(isDuplicates(mSettingAcess, nSettingAcess, kSettingAcesss))
                 {
                     setInvalid(retValue);
                     errorDecteded = TRUE;
@@ -159,7 +161,8 @@ void setInvalid(int *inArr)
         inArr[ii] = INVALID;
     }
 }
-void processLine(char *line, char **inArr, int *lineRead)
+
+void processLine(char *line, char **inArr, ValidStatus *lineRead)
 {
     char *tok;
     
@@ -209,9 +212,9 @@ void parseLine(char **inStrArr, int *settingNum)
     check = NULL;*/ 
 }
 
-int isDuplicates(int accessNumOne , int accessNumTwo, int accessNumThree)
+Boolean isDuplicates(int accessNumOne , int accessNumTwo, int accessNumThree)
 {
-    int duplicate;
+    Boolean duplicate;
     duplicate = FALSE;
     if(accessNumOne > 1 || accessNumTwo > 1 || accessNumThree > 1)
     {

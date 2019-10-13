@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "myBool.h"
 #include "gameLogic.h"
 #include "gameInterface.h"
 #include "gameGraphics.h"
@@ -8,7 +9,7 @@
 void playGame(int *gameSettings)
 {
     int *turn, *moves;
-    int  exit;
+    Boolean  exit;
     int playerPos[2];
     player **gameBoard;
     
@@ -31,16 +32,30 @@ void playGame(int *gameSettings)
         getPosition(playerPos, turn);
         if(validatePos(playerPos, gameSettings[0], gameSettings[1]))
         {
+            system("clear");
             redrawGameBoard(gameBoard, gameSettings, playerPos, turn);
-            exit = determineWinner(gameBoard, moves);
+            exit = determineWinner(gameBoard, gameSettings, playerPos);
         }
         else
         {
-            printf("ERROR: coordinates out of range please re-enter "
-            "coordinates\n");
+            printf(RED "ERROR: coordinates out of range please re-enter "
+            "coordinates\n" RESET_COLOR);
             /*clearing the buffer*/ 
             while((getchar()) != '\n');
         }
+
+        if(exit)
+        {
+            if((*turn - 1)  == 0)
+            {
+                printf(GREEN"player 2 has WON!!!!\n"RESET_COLOR);
+            }
+            else if((*turn - 1) == 1)
+            {
+                printf(GREEN"player 1 has WON!!!\n"RESET_COLOR);
+            }
+        }
+
     }while(!exit);
 
     /*MAKE THIS INTO ONE FUNCTION SO IT'S A LOT CLEANER*/
@@ -56,7 +71,8 @@ void playGame(int *gameSettings)
 IN THE RIGHT FORMAT*/
 void getPosition(int *playerPos, int *turn)
 {
-    int xCord, yCord, numReturned, valid;
+    int xCord, yCord, numReturned;
+    Boolean valid;
     valid = FALSE;
 
     do
@@ -66,7 +82,7 @@ void getPosition(int *playerPos, int *turn)
         valid = TRUE;
         if(numReturned != 2)
         {
-            printf("ERROR: enter coordinates as \"x\" \"y\"\n");
+            printf(RED"ERROR: enter coordinates as \"x\" \"y\" integers\n"RESET_COLOR);
             /*clearing the buffer, so funky stuff doesn't happen with scanf
             function */
             while((getchar()) != '\n');

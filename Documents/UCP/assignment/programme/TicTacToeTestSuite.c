@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "myBool.h"
 #include "TicTacToeTestSuite.h"
 #include "fileInterface.h"
 #include "gameInterface.h"
@@ -23,11 +24,12 @@ int main(void)
 
     numTests++; 
     printf("TEST 2: ");
+    linkedListTest();
     /*displayLogTest();*/
 
 	numTests++;
-    printf("TEST :\n");
-    playGame(gameSettings);
+    printf("\nMANUAL TESTING OF THE GAME:\n");
+    /*playGame(gameSettings);*/
 
     free(gameSettings);
     free(numPassed);
@@ -182,11 +184,204 @@ void fileInterfaceTest(int *numPassed, int *retSettings)
 	fileName = NULL;
 }
 
+void linkedListTest()
+{
+    /*code adapted from practical 7 submission */
+    char* value;
+    char *input1 = (char*)malloc(sizeof(char)*6);
+    char *input2 = (char*)malloc(sizeof(char)*4);
+    char *input3 = (char*)malloc(sizeof(char)*9);
+    char *input4 = (char*)malloc(sizeof(char)*8);
+
+    int numPassed;
+    int numTests;
+
+    LinkedList* list = NULL;
+
+    numPassed = 0;
+    numTests = 0;
+    
+    printf("Linked list test\n");
+
+    strncpy(input1, "hello",6);
+    strncpy(input2, "bye",4);
+    strncpy(input3, "Mercedes",9);
+    strncpy(input4, "Nissian",8);
+
+    /*CREATING*/
+    numTests++;
+    printf("Creating List: ");
+    list = createLinkedList();
+    if(list == NULL || list->head != NULL || list -> tail != NULL)
+    {
+        printf("FAILED\n");
+    }
+    else
+    {
+        printf("PASSED\n");
+        numPassed++;
+    }
+    
+    printf("count: %d\n", list -> count);
+    /*INSERTING FIRST*/
+    numTests++;
+    printf("Inserting First: ");
+    insertFirst(list,input1);
+    if(list->head == NULL)
+    {
+        printf("FAILED\n");
+    }
+    else if(strncmp((char*)list->head->value, input1, strlen(input1)+1)==0)
+    {
+        printf("PASSED\n");
+        numPassed++;
+    }
+    else
+    {
+        printf("FAILED\n");
+    }
+
+    display(list, printString);
+    printf("count: %d\n", list -> count);
+
+    printf("Inserting First (2): ");
+    insertFirst(list,input2);
+    if(list->head == NULL)
+    {
+        printf("FAILED\n");
+    }
+    else if(strncmp((char*)list->head->value, input2, strlen(input2)+1)==0 && 
+        strncmp((char*)list->tail->value, input1, strlen(input1)+1)==0)
+    {
+        printf("PASSED\n");
+        numPassed++;
+    }
+    else
+    {
+        printf("FAILED\n");
+    }
+
+    display(list, printString);
+    printf("count: %d\n", list -> count);
+
+    /*INSERTING LAST*/
+    printf("Inserting last ");
+    insertLast(list, input3);
+    if(list->head == NULL)
+    {
+        printf("FAILED\n");
+    }
+    else if(strncmp((char*)list->tail->value, input3, strlen(input3)+1)==0)
+    {
+        printf("PASSED\n");
+        numPassed++;
+    }
+    else
+    {
+        printf("FAILED\n");
+    }
+
+    display(list, printString);
+    printf("count: %d\n", list -> count);
+
+    printf("Inserting last (2) ");
+    insertLast(list, input4);
+    if(list -> head == NULL)
+    {
+        printf("FAILED\n");
+    }
+    else if (strncmp((char*)list->tail->value, input4, strlen(input4)+1)==0 &&
+      strncmp((char*)list->tail->prevRef->value, input3, strlen(input3)+1)==0)
+    {
+        printf("PASSED\n");
+        numPassed++;
+    }
+    else
+    { 
+        printf("FAILED\n");
+    }
+    
+
+    display(list, printString);
+    printf("count: %d\n", list -> count);
+
+    /*REMOVING LAST*/
+    removeLast(list);
+    value = (char*)removeLast(list);
+
+    printf("remove last :");
+    if(list -> head == NULL || list -> tail == NULL)
+    {
+        printf("FALIED\n");
+    }
+    else if (strncmp(value, input3, strlen(input3)+1)==0)
+    {
+        printf("PASSED\n");
+        numPassed++;
+    }
+
+    free(value);
+
+    display(list, printString);
+    /*REMOVING FIRST*/
+    printf("Remove First: ");
+    value = (char*)removeFirst(list);
+
+    if(strncmp(value, input2, strlen(input2)+1) == 0)
+    {
+        printf("PASSED\n");
+    }
+    else
+    {
+        printf("FAILED\n");
+    }
+
+    free(value);
+    
+    display(list, printString);
+    
+    printf("Remove Last (2): with only one element on the list: ");
+    value = (char*)removeLast(list);
+    if(strncmp(value, input1, strlen(input1)+1) == 0)
+    {
+        printf("PASSED\n");
+    }
+    else
+    {
+        printf("FAILED\n");
+    }
+
+    free(value);
+
+    display(list, printString);
+    
+    printf("inserting element..\n");
+    insertLast(list, input4);
+    display(list, printString);
+    printf("Remove first (2): with only one element on the list: ");
+    value = (char*)removeFirst(list);
+    if(strncmp(value, input4, strlen(input4)+1) == 0)
+    {
+
+        printf("PASSED\n");
+    }
+    else
+    {
+        printf("FAILED\n");
+    }
+    display(list, printString);
+    free(value);
+
+    /*PRINTING*/
+
+    /*FREEING*/
+    freeLinkedList(list, freePrimitives);
+}
 void displayLogTest()
 {
     int ii, logCount, turn, pos[2], *numMoves, *gameNum;
     char playerOne[2], playerTwo[2];
-    LinkedList *testLogList;
+    LinkedList *testGameLog;
     int logMovesOne[32] = {2,1,0,0,2,0,2,2,1,1,0,1,0,2,2,3,1,3,1,2,1,0,3,0,3,1,
                            3,2,0,2,3,3};
     /*int logMovesTwo[27] = {0,0,2,1,5,4,4,5,5,3,2,1,9,3,2,6,6,7,3,2,3,5,6,3,5
@@ -206,7 +401,7 @@ void displayLogTest()
     strcpy(playerOne, "X");
     strcpy(playerTwo, "O"); 
 
-    testLogList = createLinkedList(); 
+    testGameLog = createGameLog();
 
     for(ii = 0; ii < 32; ii++)
     {
@@ -217,19 +412,19 @@ void displayLogTest()
 
         if(turn == 1)
         {
-            logGame(testLogList, randomSettings, playerOne, pos, numMoves, 
+            logGame(testGameLog, randomSettings, playerOne, pos, numMoves, 
             gameNum);
             turn = 2;
         }
         else if (turn == 2)
         {
-            logGame(testLogList, randomSettings, playerTwo, pos, numMoves, 
+            logGame(testGameLog, randomSettings, playerTwo, pos, numMoves, 
             gameNum);
             turn = 1;
         }
     }
     
-    displayLog(testLogList, printLogStruct);
+    displayLog(testGameLog, printLogStruct);
     free(numMoves);
     free(gameNum);
 

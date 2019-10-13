@@ -1,20 +1,24 @@
 #ifndef GAME_LOGIC_H
 #define GAME_LOGIC_H
-    #define FALSE 0
-    #define TRUE !FALSE
     /*DON'T FORGOT TO EXPLAIN WHAT THIS DOES*/
     typedef struct player 
     {
         char player;
-        int occupied;
+        Boolean occupied;
     }player;
 
 	void playerMove(player **inArr, int *playPos, int *turn);
 	char switchPlayers(int *turn);
 	int validatePos(int  *pos, int rows, int cols);
-	int determineWinner(player **board, int *playerMoves);
-    int isDraw(player **gameBoard, int numToWin);
-    int hasWonVertically(player **gameBoard, int numToWin);
-    int hasWonHorizontally(player **gameBoard, int numTowWin);
-    int hasWonDiagonally(player **gameBoard, int numToWin);
+    Boolean determineWinner(player **board,int *settings, int playerPos[2]);
+    Boolean hasWonVertically(player **board, int *settings,int playerPos[2]);
+    int hasWonVerticallyRec(player **board, int *settings, int playerPos[2], 
+                            Direction searchDir, int *numCalled);
+    Boolean hasWonHorizontally(player **board, int *settings,int playerPos[2]);
+    int hasWonHorizontallyRec(player **board, int *settings, int playerPos[2], 
+                            Direction searchDir, int *numCalled);
+    Boolean hasWonDiagonally(player **board, int *settings,int playerPos[2]);
+    int hasWonDiagonallyRec(player **board, int *settings, int playerPos[2], 
+                            Direction searchDir, int *numCalled);
+
 #endif

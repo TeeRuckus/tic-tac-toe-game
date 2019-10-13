@@ -11,6 +11,9 @@
         char player[LOG_MSSG];
         char pos[LOG_MSSG];
     }gameLog;
+
+
+    LinkedList* createGameLog();
     void logGame(LinkedList *inList, int *inSettings, char *playerAvatar,
           int *pos, int *moves, int *numGames);
     void insertLog(LinkedList *inList, char *playerAvatar, int *pos,

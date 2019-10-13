@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "myBool.h"
 #include "gameLogic.h"
 #include "gameGraphics.h"
 
@@ -8,7 +9,6 @@ void drawGameBoard(player **placements, int *gameSettings, int *turn)
 {
     int *playerPos;
     playerPos = NULL;
-
     redrawGameBoard(placements, gameSettings, playerPos, turn);
 }
 
@@ -20,7 +20,6 @@ void redrawGameBoard(player **placements, int *gameSettings, int  *pos, int *tur
 	width = gameSettings[0];
 	height = gameSettings[1]; 
 	playerMove(placements, pos, turn);
-	
 	/*printing out the number references for the rows */
 	printf("  ");
 	for(ii = 0; ii < width; ii++)
@@ -73,9 +72,6 @@ void redrawGameBoard(player **placements, int *gameSettings, int  *pos, int *tur
 		}
 		printf("\n");
 	}
-	/*free(player);
-	player = NULL;*/
-
 }
 
 

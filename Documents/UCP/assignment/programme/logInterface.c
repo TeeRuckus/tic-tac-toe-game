@@ -14,19 +14,19 @@ void logGame(LinkedList *inList, int *inSettings, char *playerAvatar, int *pos,
             int *moves, int *numGames)
 {   
     char initLogMssg[LOG_MSSG];
-    gameLog *nwLog;
-    nwLog = NULL;
+    gameLog nwLog;
+    /*nwLog = NULL;*/
 	(*moves)++;
     /*when the game is just beggining */
     if(*moves == 0)
     {
-        sprintf(initLogMssg,"SETTINGS\n\tM:%d\n\tN:%d\n\tK:%d\n\nGAME:%d",
+        sprintf(initLogMssg,"SETTINGS\n\tM:%d\n\tN:%d\n\tK:%d\nGAME:%d",
         inSettings[0], inSettings[1], inSettings[2], *numGames); 
-        strcpy(nwLog -> mssg, initLogMssg);
-        strcpy(nwLog -> turn, "");
-        strcpy(nwLog -> player, "");
-        strcpy(nwLog -> pos, "");
-        insertFirst(inList, nwLog);
+        strcpy(nwLog.mssg, initLogMssg);
+        strcpy(nwLog.turn, "");
+        strcpy(nwLog.player, "");
+        strcpy(nwLog.pos, "");
+        insertFirst(inList, &nwLog);
     }
     /*when the game already has commenced */
     else
@@ -44,16 +44,9 @@ void insertLog(LinkedList *inList, char *playerAvatar, int *pos,
     gameLog gameEntry;
 
     /*intialising the enteries of gameLog*/
-    /*gameEntry.turn = "";
-    gameEntry.player = "";
-    gameEntry.pos = "";*/
     strcpy(gameEntry.turn, "");
     strcpy(gameEntry.player, "");
     strcpy(gameEntry.pos, "");
-    /*turn = (char*)malloc(sizeof(char) * MAX_LINE);
-    player = (char*)malloc(sizeof(char) * MAX_LINE);
-    playerPos = (char*)malloc(sizeof(char) * MAX_LINE);*/
-
 
     sprintf(playerPos, "Location: %d,%d\n",pos[0], pos[1]);
     sprintf(player, "Player: %s\n", playerAvatar);
@@ -63,14 +56,6 @@ void insertLog(LinkedList *inList, char *playerAvatar, int *pos,
     strcpy(gameEntry.player, player);
     strcpy(gameEntry.pos, playerPos);
     insertLast(inList, gameEntry);
-
-    /*free(turn);
-    free(player);
-    free(playerPos); 
-
-    turn = NULL;
-    player = NULL;
-    playerPos = NULL;*/
 }
 
 void displayLog(LinkedList *inList, funcPtr fptr)
@@ -80,8 +65,14 @@ void displayLog(LinkedList *inList, funcPtr fptr)
 
 void printLogStruct(void *data)
 {
-    printf(" %s", ((gameLog*)data) -> mssg);
-    printf(" %s", ((gameLog*)data) -> turn);
-    printf(" %s", ((gameLog*)data) -> player);
-    printf(" %s", ((gameLog*)data) -> pos);
+    gameLog *inData;
+    inData = (gameLog*)data;
+
+    printf(" %s", inData -> mssg);
+    printf(" %s", inData -> turn);
+    printf(" %s", inData -> player);
+    printf(" %s", inData -> pos);
 }
+
+/*make a method in fileInterface.c which will just print out stings to a file
+ i.e. it will just write to a file */

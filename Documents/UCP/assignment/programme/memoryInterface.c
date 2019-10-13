@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include "myBool.h"
 #include "gameLogic.h"
 #include "memoryInterface.h"
 
