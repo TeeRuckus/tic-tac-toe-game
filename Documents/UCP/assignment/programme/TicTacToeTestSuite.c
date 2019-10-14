@@ -2,15 +2,16 @@
 #include <stdlib.h>
 #include <string.h>
 #include "myBool.h"
-#include "TicTacToeTestSuite.h"
+#include "LinkList.h"
 #include "fileInterface.h"
 #include "gameInterface.h"
-#include "LinkList.h"
 #include "logInterface.h"
+#include "TicTacToeTestSuite.h"
 
 int main(void)
 {
     int numTests, *numPassed, *gameSettings;
+    LinkedList *testLog;
 
     gameSettings = (int*)malloc(MAX_SETTINGS * (sizeof(int)));
     numPassed = (int*)malloc(sizeof(int));
@@ -28,7 +29,10 @@ int main(void)
     
     numTests++;
     printf("TEST 3: ");
-    displayLogTest();
+    testLog = displayLogTest();
+
+    printf("Test 4: ");
+    writingLogFileTest(testLog);
 
 	numTests++;
     printf("\nMANUAL TESTING OF THE GAME:\n");
@@ -36,10 +40,12 @@ int main(void)
 
     free(gameSettings);
     free(numPassed);
+    freeLog(testLog, freePrimitives);
 
     gameSettings = NULL;
     numPassed = NULL;
-
+    
+    
     return 0;
 }
 
@@ -384,7 +390,7 @@ void linkedListTest()
     freeLinkedList(list, freePrimitives);
 }
 
-void displayLogTest()
+LinkedList* displayLogTest()
 {
     int ii, logCount, turn, pos[2], *numMoves, *gameNum;
     char playerOne, playerTwo;
@@ -464,10 +470,32 @@ void displayLogTest()
 
     displayLog(testGameLog, printLogStruct);
 
-    freeLog(testGameLog, freePrimitives);
     free(gameNum);
     free(numMoves);
 
     numMoves = NULL;
     gameNum = NULL;
+
+    return testGameLog;
+}
+
+void writingLogFileTest(LinkedList *inLog)
+{
+    Status result;
+    char test[9];
+
+    strcpy(test, "test.log"); 
+    printf("Writing to a log file test\n");
+
+    result = writeFile(test, inLog, printLogStructToFile);
+
+    if(result == Success)
+    {
+        printf("writing a log to a file: PASSED");
+    }
+    else if(result == Failed)
+    {
+        printf("writing a log to a file: FAILED");
+    }
+
 }

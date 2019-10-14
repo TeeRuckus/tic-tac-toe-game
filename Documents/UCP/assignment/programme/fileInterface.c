@@ -1,11 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "myBool.h"
 #include <string.h>
-#include "fileInterface.h"
+#include "myBool.h"
 #include "gameLogic.h"
 #include "memoryInterface.h"
-/*#include "myString.h"*/
+#include "LinkList.h"
+#include "fileInterface.h"
 
 /*PURPOSE: to read in a game settings file which adheres to the following format
 M=<integer> 
@@ -153,6 +153,16 @@ void readGameSettings(char *fileName, int *retValue)
 
 }
 
+Status writeFile(char *fileName, LinkedList *dataToWrite, filePrintPtr fptr)
+{
+    Status retStatus;
+    FILE *inStrm;
+    inStrm = fopen(fileName, "a");
+    retStatus = displayToFile(dataToWrite,inStrm, fptr);
+    fclose(inStrm);
+    
+    return  retStatus;
+}
 
 
 void setInvalid(int *inArr)

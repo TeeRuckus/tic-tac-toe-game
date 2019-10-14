@@ -16,6 +16,7 @@
     }LinkedList;
     
     typedef void (*funcPtr)(void*);
+    typedef void (*filePrintPtr)(void*, FILE*);
     LinkedList* createLinkedList();
     int getCount(LinkedList *list);
     LinkListNode getHead();
@@ -25,10 +26,12 @@
     void peekLast();
     void insertFirst(LinkedList *list, void *inValue);
     void insertLast();
-    void* removeLast();
-    void* removeFirst();
+    void* removeLast(LinkedList *list);
+    void* removeFirst(LinkedList *list);
     void display(LinkedList *list, funcPtr);
+    Status displayToFile(LinkedList *list,FILE *strmName, filePrintPtr fptr);
     void displayRec(LinkListNode *node, funcPtr);
+    void displayFileRec(LinkListNode *node,FILE *strmName, filePrintPtr fptr);
     void printInt(void *data);
     void printFloat(void *data); 
     void printChar(void *data);

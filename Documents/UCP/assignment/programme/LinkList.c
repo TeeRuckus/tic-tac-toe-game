@@ -2,6 +2,7 @@
 linked list */
 #include <stdio.h>
 #include <stdlib.h>
+#include "myBool.h"
 #include "LinkList.h"
 
 /*ASSERT: creates a list node with a head reference of null*/
@@ -181,6 +182,23 @@ void display(LinkedList *list, funcPtr fptr)
     }
 }
 
+Status displayToFile(LinkedList *list,FILE *strmName, filePrintPtr fptr)
+{
+    Status retStatus;
+    if(list -> head == NULL && list -> tail == NULL)
+    {
+        retStatus = Failed;
+    }
+    else
+    {
+        displayFileRec(list -> head, strmName, fptr);
+        printf("\n");
+        retStatus = Success;
+    }
+
+    return retStatus;
+}
+
 void displayRec(LinkListNode *node, funcPtr fptr)
 {
     if(node != NULL)
@@ -189,6 +207,15 @@ void displayRec(LinkListNode *node, funcPtr fptr)
         we're printing out the value before we create another stack frame */
         (fptr)(node -> value); 
         displayRec(node -> nextRef, fptr);
+    }
+}
+
+void displayFileRec(LinkListNode *node,FILE *strmName, filePrintPtr fptr)
+{
+    if(node != NULL)
+    {
+        (fptr)(node -> value, strmName);
+        displayFileRec(node -> nextRef, strmName, fptr);
     }
 }
 

@@ -11,7 +11,6 @@
         char pos[MAX_LINE];
     }gameLog;
 
-
     LinkedList* createGameLog();
     void logGameSettings(LinkedList *inLog, int *inSettings);
     void logGameNum(LinkedList *inLog, int *gameNum);
@@ -19,6 +18,7 @@
                     int *turns);
     void clearGameStruct(gameLog *inLog);
     void displayLog(LinkedList *inList, funcPtr fptr);
+    void printLogStructToFile(void *data, FILE *strmName);
     void printLogStruct(void *data);
     void freeLog(LinkedList *inLog, funcPtr fptr);
 #endif

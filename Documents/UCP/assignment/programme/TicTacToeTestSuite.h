@@ -2,5 +2,6 @@
 #define TIC_TAC_TOE_TEST_SUITE
 	void fileInterfaceTest(int *numPassed, int *retSettings);
     void linkedListTest();
-	void displayLogTest();
+    void writingLogFileTest(LinkedList *inLog);
+    LinkedList* displayLogTest();
 #endif

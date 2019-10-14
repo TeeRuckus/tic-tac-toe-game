@@ -5,5 +5,6 @@
     typedef enum Direction{Up, Down, Left, Right, DiagonallyUpLeft, 
                  DiagonallyUpRight, DiagonallyDownLeft, DiagonallyDownRight
                                                                     }Direction;
+    typedef enum Status{Failed = 0, Success = 1}Status;
 
 #endif

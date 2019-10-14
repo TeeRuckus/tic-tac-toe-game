@@ -87,6 +87,17 @@ void printLogStruct(void *data)
     printf("%s", inData -> pos);
 }
 
+void printLogStructToFile(void *data, FILE *strmName)
+{
+    gameLog *inData;
+    inData = (gameLog*)data;
+
+    fprintf(strmName, "%s", inData -> mssg);
+    fprintf(strmName, "%s", inData -> turn);
+    fprintf(strmName, "%s", inData -> player);
+    fprintf(strmName, "%s", inData -> pos);
+}
+
 void freeLog(LinkedList *inLog, funcPtr fptr)
 {
     freeLinkedList(inLog, fptr);

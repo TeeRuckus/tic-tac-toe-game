@@ -8,4 +8,5 @@
     void processLine(char *line, char **inArr, ValidStatus *lineRead);
     void parseLine(char **inStrArr, int *settingNum);
     Boolean isDuplicates(int accessNumOne , int accessNumTwo, int accessNumThree);
+    Status writeFile(char *fileName, LinkedList *dataToWrite, filePrintPtr fptr);
 #endif
