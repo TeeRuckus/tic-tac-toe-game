@@ -153,6 +153,8 @@ void readGameSettings(char *fileName, int *retValue)
 
 }
 
+
+
 void setInvalid(int *inArr)
 {
     int ii;

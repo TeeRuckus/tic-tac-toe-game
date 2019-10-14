@@ -1,8 +1,12 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
+#include "myBool.h"
 #include "LinkList.h"
 #include "logInterface.h"
 
+/*PURPOSE: is to create a game log which is consisted of the abstract data
+ * structure of a Linked List */
 LinkedList* createGameLog()
 {
     LinkedList *gameLog;
@@ -10,52 +14,61 @@ LinkedList* createGameLog()
     return gameLog;
 }
 
-void logGame(LinkedList *inList, int *inSettings, char *playerAvatar, int *pos,
-            int *moves, int *numGames)
-{   
-    char initLogMssg[LOG_MSSG];
-    gameLog nwLog;
-    /*nwLog = NULL;*/
-	(*moves)++;
-    /*when the game is just beggining */
-    if(*moves == 0)
-    {
-        sprintf(initLogMssg,"SETTINGS\n\tM:%d\n\tN:%d\n\tK:%d\nGAME:%d",
-        inSettings[0], inSettings[1], inSettings[2], *numGames); 
-        strcpy(nwLog.mssg, initLogMssg);
-        strcpy(nwLog.turn, "");
-        strcpy(nwLog.player, "");
-        strcpy(nwLog.pos, "");
-        insertFirst(inList, &nwLog);
-    }
-    /*when the game already has commenced */
-    else
-    {
-        insertLog(inList, playerAvatar, pos, moves);
-    }
+void logGameSettings(LinkedList *inLog, int *inSettings)
+{
+    char initLogMssg[MAX_LINE];
+    gameLog *nwLog = (gameLog*)malloc(sizeof(gameLog));
+    clearGameStruct(nwLog);
+
+    sprintf(initLogMssg,"SETTINGS\n\tM:%d\n\tN:%d\n\tK:%d\n\n",inSettings[0], 
+    inSettings[1], inSettings[2]); 
+    
+    strcpy(nwLog -> mssg, initLogMssg);
+    insertLast(inLog, nwLog);
 }
 
-void insertLog(LinkedList *inList, char *playerAvatar, int *pos,
-               int *moves)
+void logGameNum(LinkedList *inLog, int *gameNum)
+{
+    char gameLogNum[MAX_LINE];
+    gameLog *nwLog = (gameLog*)malloc(sizeof(gameLog));
+    clearGameStruct(nwLog);
+
+    sprintf(gameLogNum, "GAME %d:\n", *gameNum);
+
+    strcpy(nwLog -> mssg, gameLogNum);
+    insertLast(inLog, nwLog);
+}
+
+void logGamePlay(LinkedList *inLog, int playerPos[2], char playerAvatar, 
+                int *turns)
 {
     char turn[MAX_LINE];
     char player[MAX_LINE];
-    char playerPos[MAX_LINE]; 
-    gameLog gameEntry;
+    char pos[MAX_LINE]; 
 
-    /*intialising the enteries of gameLog*/
-    strcpy(gameEntry.turn, "");
-    strcpy(gameEntry.player, "");
-    strcpy(gameEntry.pos, "");
+    gameLog *nwLog = (gameLog*)malloc(sizeof(gameLog));
+    clearGameStruct(nwLog);
 
-    sprintf(playerPos, "Location: %d,%d\n",pos[0], pos[1]);
-    sprintf(player, "Player: %s\n", playerAvatar);
-    sprintf(turn, "turn: %d\n",*moves);
+    sprintf(player, "\tPlayer: %c\n", playerAvatar);
+    sprintf(turn, "\tturn: %d\n", *turns);
+    sprintf(pos, "\tLocation: %d,%d\n\n",playerPos[0], playerPos[1]);
 
-    strcpy(gameEntry.turn, turn); 
-    strcpy(gameEntry.player, player);
-    strcpy(gameEntry.pos, playerPos);
-    insertLast(inList, gameEntry);
+    strcpy(nwLog -> turn, turn); 
+    strcpy(nwLog -> player, player);
+    strcpy(nwLog -> pos, pos);
+
+    insertLast(inLog, nwLog);
+}
+
+/*PURPOSE: to turn every entry of a game stuct to an empty strings. This is to 
+ * intialise the struct so when another function tries to access it. The 
+ * programme won't crush or print out unexpected output*/
+void clearGameStruct(gameLog *inLog)
+{
+    strcpy(inLog -> mssg, "");
+    strcpy(inLog -> turn, "");
+    strcpy(inLog -> player, "");
+    strcpy(inLog -> pos, "");
 }
 
 void displayLog(LinkedList *inList, funcPtr fptr)
@@ -68,11 +81,13 @@ void printLogStruct(void *data)
     gameLog *inData;
     inData = (gameLog*)data;
 
-    printf(" %s", inData -> mssg);
-    printf(" %s", inData -> turn);
-    printf(" %s", inData -> player);
-    printf(" %s", inData -> pos);
+    printf("%s", inData -> mssg);
+    printf("%s", inData -> turn);
+    printf("%s", inData -> player);
+    printf("%s", inData -> pos);
 }
 
-/*make a method in fileInterface.c which will just print out stings to a file
- i.e. it will just write to a file */
+void freeLog(LinkedList *inLog, funcPtr fptr)
+{
+    freeLinkedList(inLog, fptr);
+}

@@ -1,23 +1,24 @@
 #ifndef LOG_INTERFACE_H
 #define LOG_INTERFACE_H
-    #define LOG_MSSG 100
-    #define MAX_LINE 20 
+    #define MAX_LINE 100 
 
     /*EXPLAIN WHAT THIS DOES*/ 
     typedef struct gameLog
     {
-        char mssg[LOG_MSSG]; 
-        char turn[LOG_MSSG];
-        char player[LOG_MSSG];
-        char pos[LOG_MSSG];
+        char mssg[MAX_LINE]; 
+        char turn[MAX_LINE];
+        char player[MAX_LINE];
+        char pos[MAX_LINE];
     }gameLog;
 
 
     LinkedList* createGameLog();
-    void logGame(LinkedList *inList, int *inSettings, char *playerAvatar,
-          int *pos, int *moves, int *numGames);
-    void insertLog(LinkedList *inList, char *playerAvatar, int *pos,
-                   int *moves);
+    void logGameSettings(LinkedList *inLog, int *inSettings);
+    void logGameNum(LinkedList *inLog, int *gameNum);
+    void logGamePlay(LinkedList *inLog, int playerPos[2], char playerAvatar, 
+                    int *turns);
+    void clearGameStruct(gameLog *inLog);
     void displayLog(LinkedList *inList, funcPtr fptr);
     void printLogStruct(void *data);
+    void freeLog(LinkedList *inLog, funcPtr fptr);
 #endif

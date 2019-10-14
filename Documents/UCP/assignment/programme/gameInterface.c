@@ -6,6 +6,10 @@
 #include "gameGraphics.h"
 #include "memoryInterface.h"
 
+/*PURPOSE: this where the main game loop is. Therefore, this function can be 
+ * thought of as a function which brings all the elements of the game such
+ * as drawing the game board, determining the winner, logging the game, and
+ * the logic of the game */
 void playGame(int *gameSettings)
 {
     int *turn, *moves;
@@ -17,9 +21,9 @@ void playGame(int *gameSettings)
     moves = (int*)malloc(sizeof(int));
     gameBoard = (player**)malloc(gameSettings[0] * sizeof(player*));
 
+    exit = FALSE;
     /*we're always going to start the game with player one*/
     *turn = 1;
-    exit = FALSE;
     *moves = 0;
 
     create2DArray(gameBoard, gameSettings[0], gameSettings[1]);

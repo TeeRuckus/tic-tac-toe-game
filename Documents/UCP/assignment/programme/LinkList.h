@@ -13,7 +13,6 @@
         LinkListNode *head;
         LinkListNode *tail;
         int count;
-
     }LinkedList;
     
     typedef void (*funcPtr)(void*);

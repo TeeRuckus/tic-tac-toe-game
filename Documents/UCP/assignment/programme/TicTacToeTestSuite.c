@@ -25,7 +25,10 @@ int main(void)
     numTests++; 
     printf("TEST 2: ");
     linkedListTest();
-    /*displayLogTest();*/
+    
+    numTests++;
+    printf("TEST 3: ");
+    displayLogTest();
 
 	numTests++;
     printf("\nMANUAL TESTING OF THE GAME:\n");
@@ -320,6 +323,7 @@ void linkedListTest()
         numPassed++;
     }
 
+    printf("count: %d\n", list -> count);
     free(value);
 
     display(list, printString);
@@ -335,6 +339,7 @@ void linkedListTest()
     {
         printf("FAILED\n");
     }
+    printf("count: %d\n", list -> count);
 
     free(value);
     
@@ -350,7 +355,7 @@ void linkedListTest()
     {
         printf("FAILED\n");
     }
-
+    printf("count: %d\n", list -> count);
     free(value);
 
     display(list, printString);
@@ -370,6 +375,7 @@ void linkedListTest()
         printf("FAILED\n");
     }
     display(list, printString);
+    printf("count: %d\n", list -> count);
     free(value);
 
     /*PRINTING*/
@@ -377,33 +383,39 @@ void linkedListTest()
     /*FREEING*/
     freeLinkedList(list, freePrimitives);
 }
+
 void displayLogTest()
 {
     int ii, logCount, turn, pos[2], *numMoves, *gameNum;
-    char playerOne[2], playerTwo[2];
+    char playerOne, playerTwo;
     LinkedList *testGameLog;
     int logMovesOne[32] = {2,1,0,0,2,0,2,2,1,1,0,1,0,2,2,3,1,3,1,2,1,0,3,0,3,1,
                            3,2,0,2,3,3};
-    /*int logMovesTwo[27] = {0,0,2,1,5,4,4,5,5,3,2,1,9,3,2,6,6,7,3,2,3,5,6,3,5
-                          ,5,6}; */
+    int logMovesTwo[28] = {0,0,2,1,5,4,4,5,5,3,2,1,9,3,2,6,6,7,3,2,3,5,6,3,5
+                          ,5,6,9}; 
     int randomSettings[3] = {10, 10, 3};
+    testGameLog = NULL;
     numMoves = (int*)malloc(sizeof(int));
     gameNum = (int*)malloc(sizeof(int));
     
     printf("display Log test\n");
-    ii = 0;
+    
     turn = 1;
     logCount = 0;
-
-    *numMoves = 0;
     *gameNum = 1;
-
-    strcpy(playerOne, "X");
-    strcpy(playerTwo, "O"); 
+    *numMoves = 0;
+    pos[0] = -1;
+    pos[1] = -1;
+    
+    playerOne = 'X';
+    playerTwo = 'O';
 
     testGameLog = createGameLog();
 
-    for(ii = 0; ii < 32; ii++)
+    logGameSettings(testGameLog, randomSettings);
+    logGameNum(testGameLog, gameNum);
+
+    for(ii = 0; ii < 16; ii++)
     {
 		pos[0] = logMovesOne[logCount];
 		pos[1] = logMovesOne[logCount + 1]; 
@@ -412,21 +424,49 @@ void displayLogTest()
 
         if(turn == 1)
         {
-            logGame(testGameLog, randomSettings, playerOne, pos, numMoves, 
-            gameNum);
+            logGamePlay(testGameLog, pos, playerOne, numMoves);
             turn = 2;
         }
         else if (turn == 2)
         {
-            logGame(testGameLog, randomSettings, playerTwo, pos, numMoves, 
-            gameNum);
+            logGamePlay(testGameLog, pos, playerTwo, numMoves);
             turn = 1;
         }
     }
     
     displayLog(testGameLog, printLogStruct);
-    free(numMoves);
+
+    *gameNum = 2;
+    logGameNum(testGameLog, gameNum);
+    *numMoves = 0;
+
+
+    printf("Simulating the start of another game\n");
+
+    for(ii = 0; ii < 14; ii++)
+    {
+		pos[0] = logMovesTwo[logCount];
+		pos[1] = logMovesTwo[logCount + 1]; 
+		(*numMoves)++;
+		logCount = logCount + 2;
+
+        if(turn == 1)
+        {
+            logGamePlay(testGameLog, pos, playerOne, numMoves);
+            turn = 2;
+        }
+        else if (turn == 2)
+        {
+            logGamePlay(testGameLog, pos, playerTwo, numMoves);
+            turn = 1;
+        }
+    }
+
+    displayLog(testGameLog, printLogStruct);
+
+    freeLog(testGameLog, freePrimitives);
     free(gameNum);
+    free(numMoves);
 
     numMoves = NULL;
     gameNum = NULL;

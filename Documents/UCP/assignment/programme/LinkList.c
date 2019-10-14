@@ -7,8 +7,7 @@ linked list */
 /*ASSERT: creates a list node with a head reference of null*/
 LinkedList* createLinkedList()
 {   
-    LinkedList *list;
-    list = (LinkedList*)malloc(sizeof(LinkedList));
+    LinkedList *list = (LinkedList*)malloc(sizeof(LinkedList));
     list -> head = NULL;
     list -> tail = NULL;
     list -> count = 0;
@@ -25,15 +24,11 @@ int getCount(LinkedList *list)
 /*ASSERTS: it adds a linked list node to the head reference of the linked list*/
 void insertFirst(LinkedList *list, void *inValue)
 {   
-    LinkListNode *nwNode;
-    nwNode = (LinkListNode*)malloc(sizeof(LinkListNode));
+    LinkListNode *nwNode = (LinkListNode*)malloc(sizeof(LinkListNode));
     nwNode -> value = inValue;
     /*the  count variable will be used to determine if they is only one item on
     the linked list */
     list -> count++;
-    
-    nwNode -> nextRef = list -> head;
-    nwNode -> prevRef = NULL;
 
     /* first case: inserting in an empty linked list*/
     if ((list -> head == NULL) && (list -> tail == NULL))
@@ -41,30 +36,31 @@ void insertFirst(LinkedList *list, void *inValue)
         /*if the list is empty, you can just make the head and the tail
         references to the new node */ 
         list -> tail = nwNode;
+        nwNode -> nextRef = NULL;
     }
     /*second case where they is one or more items stored onto the linked list*/
     else
     {
         /*a temporary node has to be created, to allow the link list to link 
         the itesm correctly */ 
+        nwNode -> nextRef = list -> head;
         list -> head -> prevRef =  nwNode;
     }
     
+    nwNode -> prevRef = NULL;
     list -> head = nwNode;
 }
 
 void insertLast(LinkedList *list, void *inValue)
 {
-    LinkListNode *nwNode;
-    nwNode = (LinkListNode*)malloc(sizeof(LinkListNode));
+    LinkListNode *nwNode = (LinkListNode*)malloc(sizeof(LinkListNode));
     nwNode -> value = inValue;
     list -> count++;
+
     /*First case: where the link list is empty*/
     if(list -> head == NULL && list -> tail == NULL)
     {
         list -> head = nwNode;
-        list -> tail = nwNode;
-        nwNode -> nextRef = NULL;
         nwNode -> prevRef = NULL;
     }
     /*second case: where the link list has one ore more list nodes connected to
@@ -77,9 +73,10 @@ void insertLast(LinkedList *list, void *inValue)
         node */ 
         list -> tail -> nextRef = nwNode;
         nwNode -> prevRef = list -> tail;
-        nwNode -> nextRef = NULL;
-        list -> tail = nwNode;
     }
+
+    list -> tail = nwNode;
+    nwNode -> nextRef = NULL;
 }
 
 void* removeLast(LinkedList *list)
@@ -87,24 +84,18 @@ void* removeLast(LinkedList *list)
     LinkListNode *currNd;
     LinkListNode *lastNd;
     void *valueLastNd;
-    /*trying to remove from an empty list*/
-    if(list -> head == NULL && list -> tail == NULL)
-    {
-        valueLastNd = NULL;
-    }
+
+    lastNd = list -> tail;
+    valueLastNd = lastNd -> value;
+
     /*if the link list has only one list node connected to it*/
-    else if(list -> count == 1)
+    if(list -> count == 1)
     {
         /* if we only have one node on the list, we can just delete the whole
         linked list, by the only node to null and freeing it. Furthermore,
         we need to  set the head and  tail reference to NULL*/
-        list ->count--;
-        lastNd = list -> tail;
         list -> tail = NULL;
         list -> head = NULL;
-        valueLastNd = lastNd -> value;
-        free(lastNd);
-        lastNd = NULL;
     }
     /*if the link list has 2 or more list nodes connected to it */
     else
@@ -115,12 +106,14 @@ void* removeLast(LinkedList *list)
         node is as C doesn't have automatic garabage collection. Hence, once
         we make a note were the last reference is we can set the previous nodes
         next reference to null, and free and set the last node to NULL*/
-        list ->count--;
         currNd = list -> tail -> prevRef;
-        lastNd = list -> tail;
         list -> tail = currNd;
         currNd -> nextRef = NULL;
-        valueLastNd = lastNd -> value;
+    }
+
+    if(lastNd != NULL)
+    {
+        list ->count--;
         free(lastNd);
         lastNd = NULL;
     }
@@ -133,24 +126,18 @@ void* removeFirst(LinkedList *list)
     LinkListNode *currNd;
     LinkListNode *firstNd;
     LinkListNode *valueFirstNd;
-    /*trying to remove from an empty list */
-    if(list -> head == NULL && list -> tail == NULL)
-    {
-        printf("ERROR: Link list is empty. Can't remove first\n");
-    }
+
+    firstNd = list -> head;
+    valueFirstNd = firstNd -> value;
+
     /*if the link list has one node connected to it */
-    else if(list -> count  == 1)
+    if(list -> count  == 1)
     {
         /*if the linked list has only one node attached to it, we can
         set the whole  linked list to NULL*/
-        list -> count--;
-        firstNd = list -> head;
         list -> tail = NULL;
         list -> head = NULL;
         
-        valueFirstNd = firstNd -> value;
-        free(firstNd);
-        firstNd = NULL;
     }
     /*if the link list has 2 or mote list nodes connected to it */
     else
@@ -161,15 +148,16 @@ void* removeFirst(LinkedList *list)
         if this is not done our linked list we be lost forever!!!! Once the 
         current node overides the position of the first node. We can free and
         set the first node to NULL*/
-        list -> count--;
         currNd = list -> head -> nextRef;
-        firstNd = list -> head;
         list -> head = currNd;
-
         currNd -> prevRef = NULL;
-        
-        valueFirstNd = firstNd -> value;
         firstNd -> nextRef =  NULL;
+
+    }
+
+    if(valueFirstNd != NULL)
+    {
+        list -> count--;
         free(firstNd);
         firstNd = NULL;
     }
@@ -242,7 +230,6 @@ void freeNodeRec(LinkListNode *node, funcPtr fptr)
         /*creating alterantive stack frames with different node values i.e.
         using recursion */
         freeNodeRec(node -> nextRef, fptr);
-
 
         (*fptr)(node->value);
 
