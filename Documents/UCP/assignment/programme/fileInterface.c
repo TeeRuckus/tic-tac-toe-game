@@ -1,6 +1,14 @@
+/*******************************************************************************
+* AUTHOR: Tawana David Kwaramba
+* STUDENT ID: 19476700
+* DATE CREATED: 
+* DATE LAST MODIFIED:
+* PURPOSE OF FILE:
+********************************************************************************/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "programmeConstants.h"
 #include "myBool.h"
 #include "gameLogic.h"
 #include "memoryInterface.h"
@@ -9,14 +17,7 @@
 
 /*PURPOSE: to read in a game settings file which adheres to the following format
 M=<integer> 
-N=<integer>
-K=<interger>.
-The function is white space sensitive and line sensitive hence, for a file to
-be correct, it must strictly adhere to the format given above.
-whereby the characters in the folder are case insentive and can be placed in any
-order. Additionally, if an error occurs during reading the settings, the
-programme will stop*/
-
+N=<integer>*/
 void readGameSettings(char *fileName, int *retValue)
 {
     int *gameSetting, mSettingAcess, nSettingAcess, kSettingAcesss,
@@ -157,7 +158,7 @@ Status writeFile(char *fileName, LinkedList *dataToWrite, filePrintPtr fptr)
 {
     Status retStatus;
     FILE *inStrm;
-    inStrm = fopen(fileName, "a");
+    inStrm = fopen(fileName, "w");
     retStatus = displayToFile(dataToWrite,inStrm, fptr);
     fclose(inStrm);
     
@@ -219,9 +220,6 @@ void parseLine(char **inStrArr, int *settingNum)
     {
         *settingNum = INVALID;
     }
-    
-    /*free(check);
-    check = NULL;*/ 
 }
 
 Boolean isDuplicates(int accessNumOne , int accessNumTwo, int accessNumThree)

@@ -31,20 +31,19 @@ void insertFirst(LinkedList *list, void *inValue)
     the linked list */
     list -> count++;
 
+    nwNode -> nextRef = list -> head;
     /* first case: inserting in an empty linked list*/
     if ((list -> head == NULL) && (list -> tail == NULL))
     {
         /*if the list is empty, you can just make the head and the tail
         references to the new node */ 
         list -> tail = nwNode;
-        nwNode -> nextRef = NULL;
     }
     /*second case where they is one or more items stored onto the linked list*/
     else
     {
         /*a temporary node has to be created, to allow the link list to link 
-        the itesm correctly */ 
-        nwNode -> nextRef = list -> head;
+        the items correctly */ 
         list -> head -> prevRef =  nwNode;
     }
     
@@ -57,12 +56,12 @@ void insertLast(LinkedList *list, void *inValue)
     LinkListNode *nwNode = (LinkListNode*)malloc(sizeof(LinkListNode));
     nwNode -> value = inValue;
     list -> count++;
+    nwNode -> prevRef = list -> tail;
 
     /*First case: where the link list is empty*/
     if(list -> head == NULL && list -> tail == NULL)
     {
         list -> head = nwNode;
-        nwNode -> prevRef = NULL;
     }
     /*second case: where the link list has one ore more list nodes connected to
     it */
@@ -73,7 +72,6 @@ void insertLast(LinkedList *list, void *inValue)
         as our new node, then we can link the new node's reference back to the
         node */ 
         list -> tail -> nextRef = nwNode;
-        nwNode -> prevRef = list -> tail;
     }
 
     list -> tail = nwNode;

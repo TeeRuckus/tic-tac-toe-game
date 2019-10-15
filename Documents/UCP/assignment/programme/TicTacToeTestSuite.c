@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "programmeConstants.h"
 #include "myBool.h"
 #include "LinkList.h"
 #include "fileInterface.h"
@@ -32,11 +33,11 @@ int main(void)
     testLog = displayLogTest();
 
     printf("Test 4: ");
-    writingLogFileTest(testLog);
+    /*writingLogFileTest(testLog);*/
 
 	numTests++;
     printf("\nMANUAL TESTING OF THE GAME:\n");
-    /*playGame(gameSettings);*/
+    playGame(gameSettings);
 
     free(gameSettings);
     free(numPassed);
@@ -175,7 +176,7 @@ void fileInterfaceTest(int *numPassed, int *retSettings)
     strncpy(fileName, "gameSettingsTestValid2.txt",27);
     readGameSettings(fileName, retSettings);
 
-    if(retSettings[0] == 10 && retSettings[1] == 5 && retSettings[2] == 4)
+    if(retSettings[0] == 3 && retSettings[1] == 3 && retSettings[2] == 3)
     {
         printf("PASSED: reading a valid file with; upper cases, lower cases"
         " mixed order of settings\n");
@@ -482,7 +483,13 @@ LinkedList* displayLogTest()
 void writingLogFileTest(LinkedList *inLog)
 {
     Status result;
-    char test[9];
+    char test[9], *fileName;
+    int *randomTestSettings;
+
+    randomTestSettings = (int*)malloc(sizeof(int) * MAX_SETTINGS);
+    randomTestSettings[0] = 10;
+    randomTestSettings[1] = 10;
+    randomTestSettings[2] = 3;
 
     strcpy(test, "test.log"); 
     printf("Writing to a log file test\n");
@@ -498,4 +505,24 @@ void writingLogFileTest(LinkedList *inLog)
         printf("writing a log to a file: FAILED");
     }
 
+    printf("writing another log...\nTesting if generate log name is working");
+    fileName = generateLogName(randomTestSettings);
+
+    result = writeFile(fileName, inLog, printLogStructToFile);
+
+
+    if(result == Success)
+    {
+        printf("writing a log to and saved using the appropriate name: PASSED");
+    }
+    else if(result == Failed)
+    {
+        printf("writing a log to a file and saved using the appropriate name: FAILED");
+    }
+
+    free(fileName);
+    free(randomTestSettings);
+
+    fileName = NULL;
+    randomTestSettings = NULL;
 }

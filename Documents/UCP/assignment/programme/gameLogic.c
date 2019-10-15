@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include "programmeConstants.h"
 #include "myBool.h"
 #include "gameLogic.h"
 #include "gameGraphics.h"
@@ -84,7 +85,6 @@ Boolean determineWinner(player **board,int *settings, int playerPos[2])
         winner = TRUE;
     }
 
-
     return winner;
 }
 
@@ -117,17 +117,6 @@ Boolean hasWonHorizontally(player **board, int *settings,int playerPos[2])
     won = FALSE;
     numCalledLeft = 0;
     numCalledRight = 0;
-
-    /*if(hasWonHorizontallyRec(board, settings, playerPos, Left, &numCalledLeft) + 1 
-       == settings[2])
-    {
-        won = TRUE;
-    }
-    else if(hasWonHorizontallyRec(board, settings, playerPos, Right, 
-            &numCalledRight) + 1 == settings[2])
-    {
-        won = TRUE;
-    }*/ 
 
     if(((hasWonHorizontallyRec(board, settings, playerPos, Left, 
     &numCalledLeft)) + (hasWonHorizontallyRec(board, settings, playerPos, Right,
@@ -326,4 +315,13 @@ int hasWonDiagonallyRec(player **board, int *settings, int playerPos[2],
     }
     
     return *numCalled;
+}
+
+int calcGameSize(int *gameSettings)
+{ 
+    int boardSize;
+
+    boardSize = gameSettings[0] * gameSettings[1];
+
+    return boardSize;
 }

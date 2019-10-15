@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "programmeConstants.h"
 #include "myBool.h"
 #include "gameLogic.h"
 #include "gameGraphics.h"

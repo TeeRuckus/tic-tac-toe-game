@@ -1,7 +1,5 @@
 #ifndef FILE_INTERFACE_H
 #define FILE_INTERFACE_H
-    #define MAX_SETTINGS 3
-    #define MAX_READ 10
     void setInvalid(int *inArr); 
     /*int* readGameSettings(char *fileName);*/
 	void readGameSettings(char *fileName, int *retValue);

@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "programmeConstants.h"
 #include "myBool.h"
 #include "gameLogic.h"
 #include "gameInterface.h"
@@ -12,9 +13,8 @@
  * the logic of the game */
 void playGame(int *gameSettings)
 {
-    int *turn, *moves;
-    Boolean  exit;
-    int playerPos[2];
+    int *turn, *moves, boardSize, playerPos[2];
+    Boolean  exit, draw;
     player **gameBoard;
     
 	turn = (int*)malloc(sizeof(int));
@@ -22,6 +22,7 @@ void playGame(int *gameSettings)
     gameBoard = (player**)malloc(gameSettings[0] * sizeof(player*));
 
     exit = FALSE;
+    draw = FALSE;
     /*we're always going to start the game with player one*/
     *turn = 1;
     *moves = 0;
@@ -29,6 +30,7 @@ void playGame(int *gameSettings)
     create2DArray(gameBoard, gameSettings[0], gameSettings[1]);
     clearGameBoard(gameBoard, gameSettings[0], gameSettings[1]);
     drawGameBoard(gameBoard, gameSettings, turn);
+    boardSize = calcGameSize(gameSettings);
 
     /*entering into the main game loop*/
     do
@@ -39,6 +41,7 @@ void playGame(int *gameSettings)
             system("clear");
             redrawGameBoard(gameBoard, gameSettings, playerPos, turn);
             exit = determineWinner(gameBoard, gameSettings, playerPos);
+            (*moves)++;
         }
         else
         {
@@ -59,8 +62,14 @@ void playGame(int *gameSettings)
                 printf(GREEN"player 1 has WON!!!\n"RESET_COLOR);
             }
         }
+        if(*moves == boardSize)
+        {
+            /*this should probs in determine winner*/
+            printf(YELLOW"it's a draw :( you both suck!!!\n"RESET_COLOR);
+            draw = TRUE;
+        }
 
-    }while(!exit);
+    }while(!exit || draw);
 
     /*MAKE THIS INTO ONE FUNCTION SO IT'S A LOT CLEANER*/
     free2DArray(gameBoard, gameSettings[0]);

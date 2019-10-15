@@ -20,5 +20,6 @@
     Boolean hasWonDiagonally(player **board, int *settings,int playerPos[2]);
     int hasWonDiagonallyRec(player **board, int *settings, int playerPos[2], 
                             Direction searchDir, int *numCalled);
+    int calcGameSize(int *gameSettings);
 
 #endif

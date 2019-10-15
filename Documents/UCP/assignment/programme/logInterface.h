@@ -1,7 +1,5 @@
 #ifndef LOG_INTERFACE_H
 #define LOG_INTERFACE_H
-    #define MAX_LINE 100 
-
     /*EXPLAIN WHAT THIS DOES*/ 
     typedef struct gameLog
     {
@@ -21,4 +19,5 @@
     void printLogStructToFile(void *data, FILE *strmName);
     void printLogStruct(void *data);
     void freeLog(LinkedList *inLog, funcPtr fptr);
+    char *generateLogName(int *gameSettings);
 #endif
