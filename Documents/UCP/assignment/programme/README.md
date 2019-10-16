@@ -31,4 +31,11 @@ KNOWN BUGS:
     saying that you have entered more than 2 numbers and re-prompt the player
     to input their numbers.
 
+    2) when you are playing the game, if you enter a coordinate such 0,1\
+    the algorithm will accept the first two numbers. Display an error to the
+    terminal and change the player to the next player
+
+    3)After a 10 x 10 gameboard the numbers on top of the board don't align
+    with their tiles properly.
+
 ADDITIONAL FUNCTIONALITY

@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * FILE: TicTacToeSuites.c                                                     *
+ * AUTHOR: Tawana David Kwaramba                                               *
+ * STUDENT ID: 19476700                                                        *
+ * DATE CREATED: 30/09/19                                                      *
+ * DATE LAST MODIFIED:                                                         *
+ * PURPOSE OF FILE: contains the testing of all functions found in this        *
+ *                  programme which comprise of the userInterface and the      *
+ *                  main                                                       *
+ *******************************************************************************/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -11,46 +21,35 @@
 
 int main(void)
 {
-    int numTests, *numPassed, *gameSettings;
+    int *gameSettings;
     LinkedList *testLog;
 
     gameSettings = (int*)malloc(MAX_SETTINGS * (sizeof(int)));
-    numPassed = (int*)malloc(sizeof(int));
 
-    numTests = 0;
-    *numPassed = 0;
+    printf(BLUE"TEST 1: "RESET_COLOR);
+    fileInterfaceTest(gameSettings);
 
-    numTests++;
-    printf("TEST 1: ");
-    fileInterfaceTest(numPassed, gameSettings);
-
-    numTests++; 
-    printf("TEST 2: ");
+    printf(BLUE"TEST 2: "RESET_COLOR);
     linkedListTest();
     
-    numTests++;
-    printf("TEST 3: ");
+    printf(BLUE"TEST 3: "RESET_COLOR);
     testLog = displayLogTest();
+    
+    printf(BLUE"Test 4: "RESET_COLOR);
 
-    printf("Test 4: ");
-    /*writingLogFileTest(testLog);*/
-
-	numTests++;
-    printf("\nMANUAL TESTING OF THE GAME:\n");
-    playGame(gameSettings);
+    printf(BLUE"\nMANUAL TESTING OF THE GAME:\n"RESET_COLOR);
+    playGame(gameSettings,NULL);
 
     free(gameSettings);
-    free(numPassed);
     freeLog(testLog, freePrimitives);
 
     gameSettings = NULL;
-    numPassed = NULL;
-    
     
     return 0;
 }
 
-void fileInterfaceTest(int *numPassed, int *retSettings)
+/*PURPOSE: to test possibl files the file interface may be requiref to read in*/
+void fileInterfaceTest(int *retSettings)
 {
     char *fileName = (char*)malloc(sizeof(char)*50);
     printf("fileInterfaceTest\n");
@@ -62,11 +61,11 @@ void fileInterfaceTest(int *numPassed, int *retSettings)
     if(retSettings[0] == INVALID && retSettings[1] == INVALID && 
     retSettings[2] == INVALID)
     {
-        printf("PASSED: tried to open a file which doesn't exist\n");
+        printf(GREEN"PASSED:"RESET_COLOR" tried to open a file which doesn't exist\n");
     }
     else
     {
-        printf("FAILED: tried to open a file which doesn't exist\n");
+        printf(RED"FAILED:"RESET_COLOR" tried to open a file which doesn't exist\n");
     }
     printf("\n");
 
@@ -78,7 +77,6 @@ void fileInterfaceTest(int *numPassed, int *retSettings)
     retSettings[2] == INVALID)
     {
         printf("PASSED: tried to read a file with a negative value\n");
-        (*numPassed)++;
     }
     else
     {
@@ -93,7 +91,6 @@ void fileInterfaceTest(int *numPassed, int *retSettings)
     retSettings[2] == INVALID)
     {
         printf("PASSED: tried to read game setting = 0\n");
-        (*numPassed)++;
     }
     else
     {
@@ -159,13 +156,13 @@ void fileInterfaceTest(int *numPassed, int *retSettings)
         printf("FAILED: tried reading a file with invalid setting p\n");
     }
     printf("\n");
-
+    
+    /*tetsing reading a valid file in the order of m,n,k*/
     strncpy(fileName, "gameSettingsTestValid.txt",26 );
     readGameSettings(fileName, retSettings);
     if(retSettings[0] == 5 && retSettings[1] == 4  && retSettings[2] == 3)
     {
         printf("PASSED: reading a valid file in the order of m,n,k\n");
-        (*numPassed)++;
     }
     else
     {
@@ -173,6 +170,7 @@ void fileInterfaceTest(int *numPassed, int *retSettings)
     }
     printf("\n");
 
+    /*testing reading a file of mixed order and mixed captilization*/
     strncpy(fileName, "gameSettingsTestValid2.txt",27);
     readGameSettings(fileName, retSettings);
 
@@ -180,7 +178,6 @@ void fileInterfaceTest(int *numPassed, int *retSettings)
     {
         printf("PASSED: reading a valid file with; upper cases, lower cases"
         " mixed order of settings\n");
-        (*numPassed)++;
 
     }
     else 
@@ -194,6 +191,8 @@ void fileInterfaceTest(int *numPassed, int *retSettings)
 	fileName = NULL;
 }
 
+/*PURPOSE: to test if the linked list is functioning properly i.e. if all its
+ * methods are working properly*/
 void linkedListTest()
 {
     /*code adapted from practical 7 submission */
@@ -203,13 +202,9 @@ void linkedListTest()
     char *input3 = (char*)malloc(sizeof(char)*9);
     char *input4 = (char*)malloc(sizeof(char)*8);
 
-    int numPassed;
-    int numTests;
 
     LinkedList* list = NULL;
 
-    numPassed = 0;
-    numTests = 0;
     
     printf("Linked list test\n");
 
@@ -219,7 +214,6 @@ void linkedListTest()
     strncpy(input4, "Nissian",8);
 
     /*CREATING*/
-    numTests++;
     printf("Creating List: ");
     list = createLinkedList();
     if(list == NULL || list->head != NULL || list -> tail != NULL)
@@ -229,12 +223,10 @@ void linkedListTest()
     else
     {
         printf("PASSED\n");
-        numPassed++;
     }
     
     printf("count: %d\n", list -> count);
     /*INSERTING FIRST*/
-    numTests++;
     printf("Inserting First: ");
     insertFirst(list,input1);
     if(list->head == NULL)
@@ -244,7 +236,6 @@ void linkedListTest()
     else if(strncmp((char*)list->head->value, input1, strlen(input1)+1)==0)
     {
         printf("PASSED\n");
-        numPassed++;
     }
     else
     {
@@ -264,7 +255,6 @@ void linkedListTest()
         strncmp((char*)list->tail->value, input1, strlen(input1)+1)==0)
     {
         printf("PASSED\n");
-        numPassed++;
     }
     else
     {
@@ -284,7 +274,6 @@ void linkedListTest()
     else if(strncmp((char*)list->tail->value, input3, strlen(input3)+1)==0)
     {
         printf("PASSED\n");
-        numPassed++;
     }
     else
     {
@@ -304,7 +293,6 @@ void linkedListTest()
       strncmp((char*)list->tail->prevRef->value, input3, strlen(input3)+1)==0)
     {
         printf("PASSED\n");
-        numPassed++;
     }
     else
     { 
@@ -327,7 +315,6 @@ void linkedListTest()
     else if (strncmp(value, input3, strlen(input3)+1)==0)
     {
         printf("PASSED\n");
-        numPassed++;
     }
 
     printf("count: %d\n", list -> count);
@@ -352,6 +339,7 @@ void linkedListTest()
     
     display(list, printString);
     
+    /*REMOVING with only one element on the list*/
     printf("Remove Last (2): with only one element on the list: ");
     value = (char*)removeLast(list);
     if(strncmp(value, input1, strlen(input1)+1) == 0)
@@ -367,6 +355,7 @@ void linkedListTest()
 
     display(list, printString);
     
+    /*INSERTING*/ 
     printf("inserting element..\n");
     insertLast(list, input4);
     display(list, printString);
@@ -385,17 +374,21 @@ void linkedListTest()
     printf("count: %d\n", list -> count);
     free(value);
 
-    /*PRINTING*/
 
     /*FREEING*/
     freeLinkedList(list, freePrimitives);
 }
 
+/*PURPOSE: testing if the log will display the information in the right format
+ * to the terminal*/
 LinkedList* displayLogTest()
 {
     int ii, logCount, turn, pos[2], *numMoves, *gameNum;
     char playerOne, playerTwo;
     LinkedList *testGameLog;
+
+    /*to be used to simulate players moves. These numbers are not meant to be
+     * taken seriously they're  just random numbers*/
     int logMovesOne[32] = {2,1,0,0,2,0,2,2,1,1,0,1,0,2,2,3,1,3,1,2,1,0,3,0,3,1,
                            3,2,0,2,3,3};
     int logMovesTwo[28] = {0,0,2,1,5,4,4,5,5,3,2,1,9,3,2,6,6,7,3,2,3,5,6,3,5
@@ -405,6 +398,7 @@ LinkedList* displayLogTest()
     numMoves = (int*)malloc(sizeof(int));
     gameNum = (int*)malloc(sizeof(int));
     
+    /*displaying log test*/
     printf("display Log test\n");
     
     turn = 1;
@@ -418,7 +412,8 @@ LinkedList* displayLogTest()
     playerTwo = 'O';
 
     testGameLog = createGameLog();
-
+    
+    /*logging the start of the games*/
     logGameSettings(testGameLog, randomSettings);
     logGameNum(testGameLog, gameNum);
 
@@ -480,6 +475,8 @@ LinkedList* displayLogTest()
     return testGameLog;
 }
 
+/*PURPOSE: to test if the supporting functions can write the logs as they're
+ * showed on screen to a file*/
 void writingLogFileTest(LinkedList *inLog)
 {
     Status result;

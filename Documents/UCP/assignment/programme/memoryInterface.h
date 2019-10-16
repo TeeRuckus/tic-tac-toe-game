@@ -1,3 +1,12 @@
+/*******************************************************************************
+*   FILE: memoryInterface.h                                                    *
+*   AUTHOR: Tawana David Kwaramba                                              *
+*   STUDENT ID: 19476700                                                       *
+*   DATE CREATED: 30/09/19                                                     *
+*   DATE LAST MODIFIED:                                                        *
+*   PURPOSE OF FILE: contains all the function prototypes of functions declared*
+*                    in memory.c                                               *
+*******************************************************************************/
 #ifndef MEMORY_INTERFACE_H
 #define MEMORY_INTERFACE_H
     void free2DArray(player **inArr, int rows);

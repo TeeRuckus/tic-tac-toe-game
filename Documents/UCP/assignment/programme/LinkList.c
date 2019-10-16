@@ -1,5 +1,12 @@
-/*PURPOSE: to create the abstract data structure of single linked, single ended
-linked list */
+/*******************************************************************************
+*   FILE: LinkList.c                                                           *
+*   AUTHOR: Tawana David Kwaramba                                              *
+*   STUDENT ID: 19476700                                                       *
+*   DATE CREATED: 30/09/19                                                     *
+*   DATE LAST MODIFIED:                                                        *
+*   PURPOSE OF FILE: to create the abstract data structure of a doubly linked, *
+*                    double eneded linked list                                 *
+*******************************************************************************/
 #include <stdio.h>
 #include <stdlib.h>
 #include "myBool.h"
@@ -51,6 +58,7 @@ void insertFirst(LinkedList *list, void *inValue)
     list -> head = nwNode;
 }
 
+/*ASSERTS: inserts a listnode at the end of the link list */
 void insertLast(LinkedList *list, void *inValue)
 {
     LinkListNode *nwNode = (LinkListNode*)malloc(sizeof(LinkListNode));
@@ -78,6 +86,7 @@ void insertLast(LinkedList *list, void *inValue)
     nwNode -> nextRef = NULL;
 }
 
+/*ASSERTS: removes the last node from the linked list*/
 void* removeLast(LinkedList *list)
 {
     LinkListNode *currNd;
@@ -109,7 +118,11 @@ void* removeLast(LinkedList *list)
         list -> tail = currNd;
         currNd -> nextRef = NULL;
     }
-
+    
+    /*in the case where the linked list has one node or multiple node we need
+     *to free the lastNd as we're deleting it hence, we are freeing the node
+     *if the tail reference didn't equal to NULL as if you try to free something
+     which is NULL you'll get an invalid free when you try to run the code*/
     if(lastNd != NULL)
     {
         list ->count--;
@@ -120,8 +133,10 @@ void* removeLast(LinkedList *list)
     return valueLastNd;
 }
 
+/*ASSERTS: removes the last node of th imported linked list*/
 void* removeFirst(LinkedList *list)
 {
+    /*the current is in reference to the node after the first node*/
     LinkListNode *currNd;
     LinkListNode *firstNd;
     LinkListNode *valueFirstNd;
@@ -141,12 +156,6 @@ void* removeFirst(LinkedList *list)
     /*if the link list has 2 or mote list nodes connected to it */
     else
     {
-        /*Care has to be taken here! The current node is the node  which is
-        after the first node (the node to be deleted) we need to do this so
-        we can link the rest of out linked list to our head reference otherwise,
-        if this is not done our linked list we be lost forever!!!! Once the 
-        current node overides the position of the first node. We can free and
-        set the first node to NULL*/
         currNd = list -> head -> nextRef;
         list -> head = currNd;
         currNd -> prevRef = NULL;
@@ -165,7 +174,8 @@ void* removeFirst(LinkedList *list)
 }
 
 /*PURPOSE: to display all the values for every single list node in the linked
-list */
+list. Furthermore, it acts a wrapper method for the displayRec hence providing
+a location to start and to return too*/
 void display(LinkedList *list, funcPtr fptr)
 {
     if(list -> head == NULL && list -> tail == NULL)
@@ -180,6 +190,8 @@ void display(LinkedList *list, funcPtr fptr)
     }
 }
 
+/*PURPOSE: to print all the contents of the linked list to a file without
+deleteting any of its content through the assitatnce of a function pointer*/
 Status displayToFile(LinkedList *list,FILE *strmName, filePrintPtr fptr)
 {
     Status retStatus;
@@ -197,6 +209,8 @@ Status displayToFile(LinkedList *list,FILE *strmName, filePrintPtr fptr)
     return retStatus;
 }
 
+/*PURPOSE: a recursive algorithm which goes to each node adn displays the nodes
+values thorugh the assistance of a function pointers*/
 void displayRec(LinkListNode *node, funcPtr fptr)
 {
     if(node != NULL)
@@ -208,6 +222,8 @@ void displayRec(LinkListNode *node, funcPtr fptr)
     }
 }
 
+/*PURPOSE: a recursive alorithm which goes through each node and prints the 
+nodes value to a file stream through the assitance of a function pointer*/
 void displayFileRec(LinkListNode *node,FILE *strmName, filePrintPtr fptr)
 {
     if(node != NULL)
@@ -217,8 +233,8 @@ void displayFileRec(LinkListNode *node,FILE *strmName, filePrintPtr fptr)
     }
 }
 
-/*common primitive data types: the following print functions are to be used in 
-conjuction with the display method */
+/*common primitive data types: to assit the displayRec function to print out
+any of the common primitives listed below*/ 
 void printInt(void *data)
 {
     printf(" %d", *(int*)data);
@@ -267,6 +283,8 @@ void freeNodeRec(LinkListNode *node, funcPtr fptr)
     }
 }
 
+/*PURPOSE: a general purpose free method to act as a function pointer in the
+freeNodeRec code */
 void freePrimitives(void *data)
 {
     free(data);
