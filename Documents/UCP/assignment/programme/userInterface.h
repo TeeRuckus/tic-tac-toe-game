@@ -11,7 +11,8 @@
 #ifndef USER_INTERFACE_H
 #define USER_INTERFACE_H
     void userInterface(int *gameSettings);
-	int validateInput(int input);
+    Boolean validateInput(int input);
     void displayCurrentSettings(int *inGameSettings);
     Boolean validateUserSettings(int mSetting, int nSetting, int kSetting);
+    void changeGameSettings(int *inGameSettings);
 #endif

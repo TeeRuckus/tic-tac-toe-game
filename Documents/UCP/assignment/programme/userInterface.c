@@ -11,9 +11,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "userInterface.h"
 #include "programmeConstants.h"
 #include "myBool.h"
+#include "userInterface.h"
 #include "LinkList.h"
 #include "fileInterface.h"
 #include "gameInterface.h"
@@ -23,9 +23,13 @@ it serves as a container for other function calls thus, it's the driving force
 behind the programme */
 void userInterface(int *gameSettings)
 {
-    int userSel, stop, valid, *gameNum;
+    int userSel, stop, *gameNum;
+    Boolean valid; 
+    #ifdef Secret
+    #else
     char *fileName;
     Status result;
+    #endif
     Boolean hasLogAccessed;
     LinkedList *gameLog;
 
@@ -38,7 +42,7 @@ void userInterface(int *gameSettings)
 
     #ifdef Editor
     printf("----------------------------------------------------------------\n");
-    printf("You have enteted into edtor mode. You may change the settings of"
+    printf("You have enteted into editor mode. You may change the settings of"
     " the game in the menu... I bestow you with the power of this game\n");
     printf("----------------------------------------------------------------\n");
     #endif
@@ -50,26 +54,26 @@ void userInterface(int *gameSettings)
     gameNum = (int*)malloc(sizeof(int)); 
     gameLog = createGameLog();
     hasLogAccessed = FALSE;
-    *gameNum = 0;
+    *gameNum = 1;
 
     logGameSettings(gameLog, gameSettings);
-    logGameNum(gameLog, gameNum);
-
-    /*menu options*/
-    printf("1: Start a new game\n"
-    "2: View the settings of the game\n"
-    "3: View the current log\n"
-    "4: Save the logs to a file\n"
-    "5: Exit the application\n");
-
-    #ifdef Editor
-    printf("6) Change game settings\n");
-    #endif
 
 
-    printf("Enter option:\n");
+
     do
     {
+        /*menu options*/
+        printf("1: Start a new game\n"
+        "2: View the settings of the game\n"
+        "3: View the current log\n"
+        "4: Save the logs to a file\n"
+        "5: Exit the application\n");
+
+        #ifdef Editor
+        printf("6: Change game settings\n");
+        #endif
+
+        printf("Enter option: ");
         scanf(" %d", &userSel);
         valid = validateInput(userSel);
 
@@ -79,12 +83,15 @@ void userInterface(int *gameSettings)
             {
                 case 1:
                     printf("Starting a new game....\n");
+                    logGameNum(gameLog, gameNum);
                     playGame(gameSettings, gameLog);
+
                     /*every time the game finishs means that our log has to be 
                      * updated and we have to prompt the user before he exited
                      * that there's new data and he must not forget to save
                      * his wor*/
                     hasLogAccessed = FALSE;
+                    (*gameNum)++;
                     break;
 
                 case 2:
@@ -97,8 +104,8 @@ void userInterface(int *gameSettings)
                     break;
                 
                 case 4:
-                    #ifdef Editor
-                    printf(RED"THIS option is disabled while in editor mode\n"
+                    #ifdef Secret
+                    printf(RED"THIS option is disabled while in secret mode\n"
                     RESET_COLOR);
                     #else
                     printf("saving the current log\n");
@@ -113,24 +120,39 @@ void userInterface(int *gameSettings)
                     {
                         printf(RED"something went wrong"RESET_COLOR);
                     }
-                    break;
+                    hasLogAccessed = TRUE;
+                    free(fileName);
+                    fileName = NULL;
                     #endif 
 
+
+                    break;
+
                 case 5:
+                    #ifdef Secret
+                    stop = TRUE;
+                    printf("....goodbye, remeber to keep everything a secret\n");
+                    #else
                     stop = TRUE;
                     if(!hasLogAccessed)
                     {
                         printf(YELLOW"Your current log hasn't been saved, press"
-                        "exit again if you want to exit without saving your"
+                        " exit again if you want to exit without saving your"
                         " current log\n"RESET_COLOR);
                         stop = FALSE;
+
+                        /*we have warned the user that their current log hasn't 
+                         * been saved yet. So on the next press of this option
+                         * we should exit the game*/
+                        hasLogAccessed = TRUE;
                     }
                     else
                     {
-                        printf("GOODBYE :)\n");
+                        printf(BLUE"GOODBYE :)\n"RESET_COLOR);
                     }
-
+                    #endif
                     break;
+
                 #ifdef Editor
                 case 6:
                     changeGameSettings(gameSettings);
@@ -143,36 +165,42 @@ void userInterface(int *gameSettings)
         }
         else
         {
-            printf("INVALID: please enter a valid option: ");
-            /*clearing the buffer to ensure what the user inputs in after incorrect
-            input is what the scanf statment will get. Additionally, it's 
-            to stop the programme from unexpictedily going into an ifinite loop*/
-            /*adapted from: 
-            https://www.geeksforgeeks.org/clearing-the-input-buffer-in-cc/ */
-            while((getchar()) != '\n');
+            printf("INVALID: please enter a valid option:\n");
 
         }
+        /*clearing the buffer to ensure what the user inputs in after incorrect
+        input is what the scanf statment will get. Additionally, it's 
+        to stop the programme from unexpictedily going into an ifinite loop*/
+        /*adapted from: 
+        https://www.geeksforgeeks.org/clearing-the-input-buffer-in-cc/ */
+        while((getchar()) != '\n');
     }while(!stop);
 
     freeLog(gameLog, freePrimitives);
     free(gameNum);
-    free(fileName);
 
     gameNum = NULL; 
-    fileName = NULL;
 }
 
 /*PURPOSE: it's the helper function to userInterface, in order to validate 
 the userInput. Furthermore, it's to clean up the userInterface function*/
-int validateInput(int input)
+Boolean validateInput(int input)
 {
-    int valid;
+    Boolean valid;
     valid = FALSE;
+    #ifdef Editor
+    if(input == 1 || input == 2 || input == 3 || input == 4 || 
+      input == 5 || input == 6)
+    {
+        valid = TRUE;
+    }
+    #else
     if(input == 1 || input == 2 || input == 3 || input == 4 || 
       input == 5)
     {
         valid = TRUE;
     }
+    #endif
 
     return valid;
 }
@@ -180,8 +208,8 @@ int validateInput(int input)
 /*ASSERTS: displays the settings to the terminal in the order of M,N, and K*/
 void displayCurrentSettings(int *inGameSettings)
 {
-    printf("The current settings of the game:\n:"); 
-    printf("M:%d\nN:%d\nK:%d",inGameSettings[0], inGameSettings[1], 
+    printf("The current settings of the game:\n"); 
+    printf("M:%d\nN:%d\nK:%d\n",inGameSettings[0], inGameSettings[1], 
                               inGameSettings[1]);
 }
 
@@ -201,7 +229,7 @@ void changeGameSettings(int *inGameSettings)
         numReturned = scanf( "%d %d %d", &mSetting, &nSetting, &kSetting);
         stop = validateUserSettings(mSetting, nSetting, kSetting);
 
-        if(stop == False)
+        if(stop == FALSE)
         {
             printf(RED"ERROR: please ensure all three settings are greater"
             "than 0\n"RESET_COLOR);

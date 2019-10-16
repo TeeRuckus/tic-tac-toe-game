@@ -128,11 +128,10 @@ void readGameSettings(char *fileName, int *retValue)
                     setInvalid(retValue);
                     errorDecteded = TRUE;
                 }
-                /*if they is more than 3 settings in the file*/
+                /*we should stop looking further in the file if it has iterated
+                 * through the file 3 times*/
                 if(lineCount == MAX_SETTINGS)
                 {
-                    printf(RED"ERROR: They is too many settings in the file\n"
-                    RESET_COLOR);
                     stop = TRUE;
                 }
                 /*catching duplicate settings*/
@@ -167,6 +166,7 @@ void readGameSettings(char *fileName, int *retValue)
                     RESET_COLOR, lineCount);
                     errorDecteded = TRUE;
                 }
+                stop = TRUE;
             }
             /*if the programme gets to this else stament is because 
              * that the exported line is NULL or the exported isValidLine

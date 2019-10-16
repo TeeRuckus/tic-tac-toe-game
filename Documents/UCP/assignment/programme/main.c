@@ -9,9 +9,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "userInterface.h"
 #include "programmeConstants.h"
 #include "myBool.h"
+#include "userInterface.h"
 #include "LinkList.h"
 #include "fileInterface.h"
 #include "gameInterface.h"
@@ -36,7 +36,7 @@
     else
     {
         printf(RED"ERROR: ensure that you only enter ./<programme name>"
-        "<settings file>\n"RESET_COLOR);
+        " <settings file>\n"RESET_COLOR);
     }
 
     

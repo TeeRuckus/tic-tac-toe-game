@@ -38,4 +38,7 @@ KNOWN BUGS:
     3)After a 10 x 10 gameboard the numbers on top of the board don't align
     with their tiles properly.
 
+    4)When you enter a random input into the user interface, it will always
+    go to the first otion an input it as plyer ones option
+
 ADDITIONAL FUNCTIONALITY
