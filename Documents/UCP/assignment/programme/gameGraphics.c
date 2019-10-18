@@ -5,7 +5,7 @@
 *  DATE CREATED: 30/09/19                                                      *
 *  DATE LAST MODIFIED:                                                         *
 *  PURPOSE OF FILE: it's contain all the visual acspects of the game.          *
-*                   Therefore* the file is to handle the drawing of the whole  *
+*                   Therefore the file is to handle the drawing of the whole   *
 *                   game board, handling the avatars of each player.           *
 *********************************************************************************/
 #include <stdio.h>

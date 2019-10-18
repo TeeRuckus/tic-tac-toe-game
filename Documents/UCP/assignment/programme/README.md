@@ -30,15 +30,39 @@ KNOWN BUGS:
     just grab the first 2 numbers. The programme should, display an error 
     saying that you have entered more than 2 numbers and re-prompt the player
     to input their numbers.
+        solution: use fgets. Except have fgets reading in from stdin and try
+        to convert that to an integer using the strtol function. If the strtol
+        function succefully returns the parsed intergers it will return the null
+        terminator. If it doesn't we know that something went wrong and a string
+        is included after the integers been parsed. Then after you can have 
+        another function which will check if the parsed intergers are only
+        two  numbers. If they're everything is all good, if not we can display
+        an error  message and ask for a re-prompt
 
-    2) when you are playing the game, if you enter a coordinate such 0,1\
+    2) when you are playing the game, if you enter a coordinate such as 0 1\
     the algorithm will accept the first two numbers. Display an error to the
     terminal and change the player to the next player
+        solution: the solution is quite similiar to the first one, instead of
+        using scanf. Use fgets except for the stream name, you would change
+        that to standard in. Then you try to parse that string using strtol 
+        if the conversion is succesful your second argument in fgets will be
+        the  terminato if it's not, it will be something else.
 
     3)After a 10 x 10 gameboard the numbers on top of the board don't align
     with their tiles properly.
+        solution: this may to be how I hav ordereded my print statements
+       in gameGraphics.c
 
     4)When you enter a random input into the user interface, it will always
     go to the first otion an input it as plyer ones option
+        solution: excatly the same as bug 2
 
 ADDITIONAL FUNCTIONALITY
+    -When exiting the user interface, the programme checks if you have saved 
+    your current game log and if you haven't it prompts you to do so.
+
+TO DO:
+    To have the programme handle ctrl-c action. Henc, if the user enters
+    ctrl-c the programme should be able to rederict itself to a function which
+    will clean  up everything i.e. free what needs to be done. Additionally, 
+    the function can save the current game log so the data is not lost

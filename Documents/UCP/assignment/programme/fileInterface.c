@@ -53,6 +53,7 @@ void readGameSettings(char *fileName, int *retValue)
     /*creating a 2-d an array in order to create an array of strings, so
      * each line read in the file can be stored in each index as a string*/
     createChar2DArray(gameSettingsStr, MAX_SETTINGS, MAX_READ);
+    /*setInvalid(retValue);*/
 
     if(inStrm != NULL)
     {
@@ -77,9 +78,8 @@ void readGameSettings(char *fileName, int *retValue)
              * line */ 
             fgets(line, MAX_READ, inStrm);
             processLine(line, gameSettingsStr, isValidLine);
-            lineCount++;
 
-            if(line != NULL && *isValidLine)
+            if(line != NULL && *isValidLine == VALID)
             {
                 parseChar(gameSettingsStr, gameSetting);
                 /*the settings cannot be a negative number or a zero number as 
@@ -111,8 +111,8 @@ void readGameSettings(char *fileName, int *retValue)
                             break;
 
                         default:
-                            printf(RED"line %d:ERROR: invalid  setting format\n"
-                            RESET_COLOR, lineCount);
+                            printf(RED"line %d:ERROR: invalid setting format\n"
+                            RESET_COLOR, lineCount + 1);
                             errorDecteded = TRUE;
                             /*an error occured hence, we should set the settings
                              * to invalid which is -1, -1, -1 */
@@ -123,8 +123,9 @@ void readGameSettings(char *fileName, int *retValue)
                 /*if a setting is 0 or a negative number*/
                 else
                 {
-                    printf(RED"ERROR: setting can't be <= 0:line:%d\n"
-                    RESET_COLOR,lineCount); 
+                    printf(RED"ERROR: setting can't be <= 0 or you have entered"
+                    " a string or character in setting:line:%d\n"
+                    RESET_COLOR,lineCount + 1); 
                     setInvalid(retValue);
                     errorDecteded = TRUE;
                 }
@@ -140,7 +141,7 @@ void readGameSettings(char *fileName, int *retValue)
                     setInvalid(retValue);
                     errorDecteded = TRUE;
                     printf(RED"ERROR: duplicate in file found in line:%d\n"
-                    RESET_COLOR, lineCount);
+                    RESET_COLOR, lineCount + 1);
                 }
                 /*just an extra cautios check to ensure that no errors have 
                 occured in processing the last line. If an error has occured,
@@ -148,7 +149,7 @@ void readGameSettings(char *fileName, int *retValue)
                 if(ferror(inStrm))
                 {
                     setInvalid(retValue);
-                    printf("line %d", lineCount);
+                    printf("line %d", lineCount + 1);
                     perror(":ERROR: in processing last read line ");
                     errorDecteded = TRUE;
                 }
@@ -163,7 +164,7 @@ void readGameSettings(char *fileName, int *retValue)
                 {
                     setInvalid(retValue);
                     printf(RED"ERORR: not enough settings in file:line%d\n"
-                    RESET_COLOR, lineCount);
+                    RESET_COLOR, lineCount + 1);
                     errorDecteded = TRUE;
                 }
                 stop = TRUE;
@@ -177,11 +178,12 @@ void readGameSettings(char *fileName, int *retValue)
             else
             {
                 printf(RED"line %d:ERROR: invalid argument\n"
-                RESET_COLOR, lineCount);
+                RESET_COLOR, lineCount + 1);
                 stop = TRUE;
                 setInvalid(retValue);
             }
 
+            lineCount++;
         }while((!errorDecteded) && (!stop));
         fclose(inStrm);
     }

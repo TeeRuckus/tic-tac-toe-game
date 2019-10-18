@@ -16,6 +16,7 @@
 #include "fileInterface.h"
 #include "gameInterface.h"
 #include "logInterface.h"
+
  int main(int argc, char *argv[])
 {
     if(argc == 2)
@@ -39,6 +40,5 @@
         " <settings file>\n"RESET_COLOR);
     }
 
-    
     return 0;
 }

@@ -52,10 +52,10 @@ void logGameSettings(LinkedList *inLog, int *inSettings)
     inSettings[1], inSettings[2]); 
     
     strcpy(nwLog -> mssg, initLogMssg);
-
-    /*doesn't really matter if we insert first or last but, the settings are
-     * always going to be the top of the log file*/
-    insertFirst(inLog, nwLog);
+    
+    /*needs to be insert last in cases when we're running the game in editor
+    mode and we change the settings during game play*/
+    insertLast(inLog, nwLog);
 }
 
 /*ASSERTS: inserts a structure into a linked list which only contains the game

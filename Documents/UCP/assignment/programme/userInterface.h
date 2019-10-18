@@ -15,4 +15,5 @@
     void displayCurrentSettings(int *inGameSettings);
     Boolean validateUserSettings(int mSetting, int nSetting, int kSetting);
     void changeGameSettings(int *inGameSettings);
+    void checkFileWriteSucceed(Status result);
 #endif

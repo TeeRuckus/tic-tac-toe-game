@@ -23,15 +23,16 @@ it serves as a container for other function calls thus, it's the driving force
 behind the programme */
 void userInterface(int *gameSettings)
 {
-    int userSel, stop, *gameNum;
+    int userSel, stop, *gameNum, numReturned;
     Boolean valid; 
+    LinkedList *gameLog;
     #ifdef Secret
     #else
     char *fileName;
     Status result;
-    #endif
     Boolean hasLogAccessed;
-    LinkedList *gameLog;
+    hasLogAccessed = FALSE;
+    #endif
 
     #ifdef Secret
     printf("----------------------------------------------------------------\n");
@@ -53,9 +54,8 @@ void userInterface(int *gameSettings)
     stop = FALSE;
     gameNum = (int*)malloc(sizeof(int)); 
     gameLog = createGameLog();
-    hasLogAccessed = FALSE;
     *gameNum = 1;
-
+    
     logGameSettings(gameLog, gameSettings);
 
 
@@ -74,8 +74,15 @@ void userInterface(int *gameSettings)
         #endif
 
         printf("Enter option: ");
-        scanf(" %d", &userSel);
-        valid = validateInput(userSel);
+        numReturned = scanf(" %d", &userSel);
+        if(numReturned == 1)
+        {
+            valid = validateInput(userSel);
+        }
+        else
+        {
+            valid = FALSE;
+        }
 
         if(valid)
         {
@@ -85,12 +92,15 @@ void userInterface(int *gameSettings)
                     printf("Starting a new game....\n");
                     logGameNum(gameLog, gameNum);
                     playGame(gameSettings, gameLog);
-
                     /*every time the game finishs means that our log has to be 
                      * updated and we have to prompt the user before he exited
                      * that there's new data and he must not forget to save
                      * his wor*/
+                    #ifdef Secret
+                     /*so nothing*/
+                    #else
                     hasLogAccessed = FALSE;
+                    #endif
                     (*gameNum)++;
                     break;
 
@@ -111,15 +121,7 @@ void userInterface(int *gameSettings)
                     printf("saving the current log\n");
                     fileName = generateLogName(gameSettings);
                     result = writeFile(fileName, gameLog, printLogStructToFile);
-
-                    if(result == Success)
-                    {
-                        printf("finished wrting to file\n");
-                    }
-                    else
-                    {
-                        printf(RED"something went wrong"RESET_COLOR);
-                    }
+                    checkFileWriteSucceed(result);
                     hasLogAccessed = TRUE;
                     free(fileName);
                     fileName = NULL;
@@ -156,6 +158,9 @@ void userInterface(int *gameSettings)
                 #ifdef Editor
                 case 6:
                     changeGameSettings(gameSettings);
+                    /*whenever we change settings we want to add the new settings
+                    onto the log*/
+                    logGameSettings(gameLog, gameSettings);
                     break;
                 #endif
                 default:
@@ -165,7 +170,7 @@ void userInterface(int *gameSettings)
         }
         else
         {
-            printf("INVALID: please enter a valid option:\n");
+            printf(RED"ERROR: please enter a valid option:\n"RESET_COLOR);
 
         }
         /*clearing the buffer to ensure what the user inputs in after incorrect
@@ -208,9 +213,9 @@ Boolean validateInput(int input)
 /*ASSERTS: displays the settings to the terminal in the order of M,N, and K*/
 void displayCurrentSettings(int *inGameSettings)
 {
-    printf("The current settings of the game:\n"); 
-    printf("M:%d\nN:%d\nK:%d\n",inGameSettings[0], inGameSettings[1], 
-                              inGameSettings[1]);
+    printf("\nThe current settings of the game:\n"); 
+    printf("M:%d\nN:%d\nK:%d\n\n",inGameSettings[0], inGameSettings[1], 
+                              inGameSettings[2]);
 }
 
 
@@ -220,27 +225,29 @@ void changeGameSettings(int *inGameSettings)
 {
     int mSetting, nSetting, kSetting, numReturned;
     Boolean stop;
-    printf("Enter three values seperated by settings for the following game"
-    " settings m,n,k\n");
-
+    printf("Enter three values for game settings as m n k: ");
+    
+    mSetting = 0;
+    nSetting = 0;
+    kSetting = 0;
     stop = FALSE; 
     do
     {
         numReturned = scanf( "%d %d %d", &mSetting, &nSetting, &kSetting);
         stop = validateUserSettings(mSetting, nSetting, kSetting);
 
-        if(stop == FALSE)
-        {
-            printf(RED"ERROR: please ensure all three settings are greater"
-            "than 0\n"RESET_COLOR);
-        }
-
         if(numReturned != 3)
         {
             printf(RED"ERROR: invalid argument arrangment\n"RESET_COLOR);
             stop = FALSE;
+            while((getchar()) != '\n');
         }
-
+        else if(stop == FALSE)
+        {
+            printf(RED"ERROR: please ensure all three settings are greater"
+            " than 0\n"RESET_COLOR);
+            while((getchar()) != '\n');
+        }
     }while(!stop);
 
     inGameSettings[0] = mSetting;
@@ -261,4 +268,16 @@ Boolean validateUserSettings(int mSetting, int nSetting, int kSetting)
     }
     
     return isValid;
+}
+
+void checkFileWriteSucceed(Status result)
+{
+    if(result == Success)
+    {
+        printf("finished wrting to file\n");
+    }
+    else
+    {
+        printf(RED"something went wrong"RESET_COLOR);
+    }
 }
